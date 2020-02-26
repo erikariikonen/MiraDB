@@ -1,0 +1,25 @@
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th ng-repeat="table_column in table_columns">
+        {{table_column}}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="table_row in table_rows">
+      <td ng-repeat="table_column in table_columns">
+        {{table_row[table_column]}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!--
+<ul>
+  <li ng-repeat="table in tables">
+    {{table}} ({{table_details(table)}})
+  </li>
+</ul>
+-->

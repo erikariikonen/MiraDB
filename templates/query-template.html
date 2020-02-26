@@ -1,0 +1,75 @@
+
+<div class="data-table">
+  <h4 ng-show="editable">Esimerkkikysely</h4>
+
+  <textarea class="form-control" rows="{{rows}}" cols="80" ng-model="query" ng-readonly="editable">
+    
+  </textarea>
+
+  <div ng-hide="done && editable">
+    <br/>
+    
+    <button type="button" class="btn btn-default" ng-click="run_query(query)">
+      <span class="glyphicon glyphicon-play-circle" aria-hidden="true"></span> Suorita
+    </button>
+    
+    <br/>
+  </div>
+  
+  <div ng-show="valid && done">
+    <br/>
+    <h3 class="glyphicon glyphicon-thumbs-up">&nbsp;Oikein meni!</h3>
+  </div>
+  
+  <div class="alert alert-danger" role="alert" ng-show="error">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Virhe:</span>
+    {{error}}
+  </div>
+  
+  <br/>
+  <br/>
+  
+  <div ng-show="columns">
+    
+    <h4>
+      <em>Suoritetun kyselyn tulos</em> 
+    </h4>
+    
+    <div class="alert alert-danger" role="alert" ng-show="validMessage">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">&nbsp;Virhe:</span>
+      <br/>
+      <br/>
+<!--      <span class="sr-only">Virhe:</span> -->
+      <ul class="list-unstyled">
+	<li ng-repeat="msg in validMessage">
+	  {{msg}}
+	</li>
+      </ul>
+    </div>
+    
+    <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th ng-repeat="column in columns">
+                    {{column}}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in rows">
+                <td ng-repeat="column in columns">
+                    {{row[column]}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <button type="button" class="btn btn-default" ng-hide="editable=='false'" ng-click="clear()">Tyhjennä tulokset</button>
+
+    <button type="button" class="btn btn-default" ng-show="reset" ng-click="doReset()">Tyhjennä tulokset ja poista tietokantataulut</button>
+    <br/>
+    <br/>
+    
+  </div>
+</div>

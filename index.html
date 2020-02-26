@@ -1,0 +1,3133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Tietokantojen perusteet</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="js/libs/syntaxhighlight/css/sh_style.css" />
+	<link rel="stylesheet" href="css/tikape.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+</head>
+
+<body ng-app='myApp'>
+
+	<article>
+
+		<!-- BEGIN INDEX -->
+		<section id="intro" class="no-toc weeklimit" data-week-id="0">
+
+			<header>
+
+				<div class="intro-header-img"></div>
+
+				<h1>Tietokantojen perusteet</h1>
+
+				<p><em>"miten tietoa sekä siihen liittyviä yhteyksiä mallinnetaan ja hallinnoidaan?" </em></p>
+
+			</header>
+
+			<h1 id="start">Sisältö</h1>
+
+			<p><em>"Kurssilla tutustutaan tiedon esitysmuotoihin ja tiedon hakuun suurista tietomääristä. Erityisenä
+					painopisteenä ovat relaatiotietokannat, joiden kohdalla perehdytään toisaalta teoreettiseen
+					perustaan ja toisaalta tietokannan käytännön käsittelyyn SQL-kielen avulla. Kurssilla opitaan myös
+					perustiedot relaatiotietokantojen suunnittelusta."</em>
+				<br /><br />
+				ALOITUS: Tee GitHubiin repositorio nimeltä SQL. Tallenna vastaukset repositorion juureen tehtävän
+				nimellä md-tiedostona, esim. teht1.md, teht2.md jne.
+
+			</p>
+
+			</p>
+
+		</section>
+		<!-- END INDEX -->
+
+
+		<section class="weeklimit" data-week-id="1">
+
+			<h1>Johdanto</h1>
+
+			<p>Kävellessäsi Helsingin keskustassa näet ihmisvilinän, kuulet puheensorinan, huomaat uutisotsikoita,
+				mainostauluja ja erilaisia laitteita, jotka tarjoavat monipuolista tietoa sinua ympäröivästä maailmasta.
+				Vaikka tämä toiminta voi tuntua satunnaiselta, voit havaita siitä erilaisia sääntöjä ja hahmoja. Ihmiset
+				kulkevat paikasta toiseen tietoisten tai tiedostamattomien tavoitteiden ohjaamina. Puhe tapahtuu
+				tietyllä kielellä, jolla on oma kielioppi. Uutisotsikoilla on tietynlainen tekstityyli. Mainostaulut
+				hakevat näytettävän mainoksen verkon yli, ja laitteet -- esimerkiksi kännykkäsi -- seuraavat niihin
+				ohjelmoituja sääntöjä, osittain antamiesi komentojen ohjaamana.</p>
+
+			<p>Nämä säännöt ja hahmot kuvaavat tiedon rakennetta. Osa tiedosta on jäsentelemätöntä, eli sille ei ole
+				tarkasti määriteltyä muotoa. Esimerkiksi puheensorina voi poukkoilla teemasta toiseen, ja vastaavasti
+				tietoisten ja tiedostamattomien tavoitteiden tarkka kirjaaminen olisi, ainakin, hyvin haastavaa.</p>
+
+			<p>Toisaalta, voit lukea saman uutisen lähes sanasta sanaan lehdestä, kännykästäsi tai netistä, olettaen
+				että uutispalvelun tarjoaja on sama. Uutinen on jäsennelty otsikkoon, johdantoon, ja tekstikappaleisiin
+				sekä niihin liittyviin väliotsikkoihin. Eri järjestelmät näyttävät tämän tiedon eri tavalla, ja samalla
+				tarjoavat uutistietoon erilaisen pääsyn. Toimittaja muokkaa ja katsoo uutista sen kirjoittamiseen
+				tarkoitetun sisällönhallintajärjestelmän kautta, kännykällä uutista lukeva saattaa nähdä uutisen
+				kännykän ominaisuuksiin mukautuvan web-sivuston kautta, ja uutisia listaava uutissivusto saattaa listata
+				uutisesta vain sen otsikon.</p>
+
+			<p>Puhekielessä termillä tietokanta tarkoitetaan yleisesti ottaen tiedon tallentamiseen tarkoitettua
+				paikkaa, josta tietoa voi myös hakea. Esimerkiksi kirkonkirjat voidaan nähdä eräänlaisena sukujen
+				historiaa dokumentoivana tietokantana, jonka kautta sukututkija pääsee käsiksi sukunsa historiaan.
+				Vaikka tietokannat ovat digitalisaation myötä siirtymässä paperisesta muodosta sähköiseen muotoon, on
+				niiden tavoite pysynyt pitkälti samana: <em>haluamme säilöä tietoa, ja haluamme päästä tähän tietoon
+					käsiksi</em>. Tällä kurssilla käsittelemme elektronisia tietokantoja, joiden kehittyminen on
+				johtanut tilanteeseen, missä tietoa tallennetaan yhä enemmän ja sitä halutaan hyödyntää yhä
+				monipuolisemmin.</p>
+
+			<aside class="info">
+				<br />
+				<h1>Tutustu tietokantaan!</h1>
+				<p>Tässä kohtaa on erittäin hyvä hetki käydä tutustumassa muutamaan tietokantapalveluun. Osoitteessa <a
+						href="http://hiski.genealogia.fi/hiski/" target="_blank">http://hiski.genealogia.fi/hiski/</a>
+					on Suomen Sukututkimusseuran ylläpitämä Historiakirjojen hakupalvelu. Käy sivulle, valitse kieli,
+					etsi "Kaikista", ja valitse "Kastetut".</p>
+				<h4>1. tehtävä: Tutustu tietokantaan</h4>
+				<p><b>
+						Minkälaisia tuloksia löydät omalla etunimelläsi? Entä, minkälaisia tuloksia löydät nimillä Matti
+						ja
+						Maija? Palvelu pyrkii muunmuassa sisällyttämään läheiset nimien muunnokset hakutuloksiin, sillä
+						nimet muuttuvat ajan myötä. </b></p>
+			</aside>
+
+			<p>Nykyään tietokantoja on kaikkialla. Tämä kurssimateriaali sijaitsee tietokannassa, kurssitehtäviin
+				liittyvät pisteet kirjataan tietokantaan, ja tehdessäsi kurssilla tarpeeksi töitä kurssiin liittyvien
+				oppimistavoitteiden saavuttamiseksi kurssista kirjataan suoritusmerkintä tietokantaan. Jo pelkästään
+				nykyaikaisessa kännykässäsi on kymmeniä erilaisia tietokantoja; yhteystiedot, kalenteri, herätyskello,
+				aikavyöhykkeet, karttapalvelut, suosikkiverkkosivut, jonka lisäksi moni kännykkäsovellus hyödyntää yhtä
+				tai useampaa tietokantaa. Tietokannat voivat olla paikallisia, eli ne voivat sijaita samalla koneella
+				tietokantaa käyttävän ohjelmiston kautta, esimerkiksi kännykässä, tai ne voivat sijaita erillisellä
+				palvelimella, johon otetaan tarvittaessa yhteyttä. Loppukäyttäjän näkökulmastasi tällä ei kuitenkaan ole
+				juurikaan merkitystä. Näet tietokannasta haetun tiedon käyttämäsi sovelluksen tarjoaman näkymän kautta.
+			</p>
+
+
+			<aside class="info">
+				<br />
+				<h1>Tieto toistuu, monistuu, ja yhdistyy</h1>
+
+				<p>Moni tietokantaa käyttävä palvelu käyttää henkilöihin liittyviä tietoja, kuten osoitetta,
+					puhelinnumeroa tai sähköpostiosoitetta. Kun rekisteröidyt verkossa oleviin palveluihin, on
+					tyypillistä, että ne pyytävät vähintään sähköpostiosoitteen. Nämä tiedot tallentuvat kuitenkin
+					palvelu- tai yrityskohtaisiin tietokantoihin, josta niitä mahdollisesti yhdistellään.</p>
+				<h4>2. Tehtävä: Käyttämäsi tietokannat</h4>
+				<p><b>Pohdi, kuinka moneen palveluun olet syöttänyt sähköpostiosoitteesi? Entä nimesi tai
+						syntymäpäiväsi?
+						Tyypillisesti moni näistä palveluista on erillinen, mutta, tulevaisuudessa tätä tietoa tullaan
+						yhdistämään yhä enemmän ja enemmän paremman yleiskuvan saamiseksi, sekä tilastoihin perustuvien
+						päätösten tekemiseksi.</b></p>
+
+				<p>Esimerkiksi sekä sähkö- että peliyhtiöt kummatkin hyötyvät merkittävästi saadessaan tietoa palvelun
+					käyttöasteesta. Sähköyhtiöt voivat käyttää tätä tietoa sähkön tarpeen ennustamiseen, jonka avulla
+					sähkön tuotantoa voidaan säännöstellä -- peliyhtiöt taas voivat muunmuassa hyödyntää käyttötilastoja
+					pelin toimivien ja ei-toimivien osa-alueiden kehittämiseen.</p>
+
+			</aside>
+
+			<h2>Tietokanta ja tiedon rakenteen kuvaaminen</h2>
+
+			<p>Tietokanta on kokoelma tiettyyn aihepiiriin liittyviä säilytettäviä tietoja. Tietokannan luominen liittyy
+				usein jonkinlaisen organisaation, yrityksen tai muun yhteisön tarpeeseen säilöä ja hakea tietoa.
+				Esimerkiksi Varian ammattiopisto haluaa pitää kirjaa opiskelijoistaan ja heidän opintomenestystään,
+				hotelli haluaa
+				pitää kirjaa hotellin huoneiden varauksista, ja kauppaketju haluaa pitää kirjaa asiakkaistaan ja
+				asiakkaiden ostoksista.</p>
+
+			<p>Tallennettava tieto liittyy tyypillisesti johonkin tavoitteeseen. Oppilaitos haluaa seurata opintojen
+				etenemistä esimerkiksi valtionhallinnolle raportointia varten, huoneiden varaustilannetta seuraava
+				hotelli taas haluaa tietää milloin huoneita on paljon tarjolla, ja milloin huoneet ovat lopussa.
+				Kauppaketjun ensisijaisena tavoitteena on asiakkaiden ostosten seuranta myynnin optimoimiseksi.</p>
+
+			<p>Tietokantojen rakennetta ja jäsentelyä suunniteltaessa ongelmaa lähestytään tavoitteeseen liittyvien
+				käsitteiden kautta, joiden avulla pyritään ymmärtämään mikä tiedosta on epäoleellista, ja mikä tulee
+				säilöä. Samalla mietitään myös säilöttävien käsitteiden ominaisuuksia sekä käsitteiden suhteita.
+				Esimerkiksi opiskelijan opintomenestyksen seurannassa oleellisia ovat ainakin käsitteet
+				<em>Opiskelija</em> ja <em>Kurssisuoritus</em>, joilla on yhteys: opiskelijalla on kurssisuorituksia.
+			</p>
+
+			<p>Tällä kurssilla tiedon mallintamiseen käytetään <a href="http://www.uml.org/"
+					target="_blank">UML</a>-kieltä. Käytämme <a href="https://fi.wikipedia.org/wiki/Luokkakaavio"
+					target="_blank">luokkakaavioista</a> johdettua tapaa käsitteiden ominaisuuksien ja suhteiden
+				mallintamiseen. </p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-ja-kurssisuoritus-erilliset-kasitteet.png"
+					alt="Teksti 'Opiskelija' suunnikkaan sisään kirjoitettuna, Teksti 'Kurssisuoritus' toisen suunnikkaan sisään kirjoitettuna.">
+				<figcaption>Käsitteet kuvataan laatikkoina, joiden sisällä on käsitteen nimi. Yllä käsitteet Opiskelija
+					ja Kurssisuoritus.</figcaption>
+			</figure>
+
+			<p>Jos haluamme ilmaista, että käsite liittyy toiseen käsitteeseen, piirrämme käsitteiden välille viivan.
+				Viivan kumpaankin päätyyn merkitään osallistumisrajoitteet, joilla kuvataan sitä, että kuinka monessa
+				samantyyppisessä yhteydessä käsitteen ilmentymä voi olla. Jos ilmentymään voi liittyä tasan yksi toisen
+				tyyppinen ilmentymä, lisäämme viivan toisen tyyppisen ilmentymän päähän numeron yksi. Toisaalta, jos
+				ilmentymien määrä on rajoittamaton, lisäämme viivan päähän tähden. Alla olevassa kaaviossa on käsitteet
+				Opiskelija ja Kurssisuoritus, sekä viiva käsitteiden välillä. Yhteen kurssisuoritukseen liittyy aina
+				tasan yksi opiskelija, mutta yhdellä opiskelijalla voi olla useampia kurssisuorituksia.</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-ja-kurssisuoritus-ei-attribuutteja.png"
+					alt="Teksti 'Opiskelija' suunnikkaan sisään kirjoitettuna, Teksti 'Kurssisuoritus' toisen suunnikkaan sisään kirjoitettuna. Suunnikkaiden välille on piirretty viiva, jonka Kurssisuoritus-käsitteen päässä on tähti.">
+				<figcaption>Opiskelijaan liittyy useita kurssisuorituksia, mutta jokaiseen kurssisuoritukseen liittyy
+					tasan yksi opiskelija.</figcaption>
+			</figure>
+
+			<p>Käsitteisiin kuuluu tyypillisesti ominaisuuksia. Ominaisuudet merkitään laatikkoon käsitteen nimen alle.
+				Alla olevassa kuvassa Opiskelija-käsitteeseen liittyy ominaisuudet nimi, syntymävuosi ja pääaine.</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-ja-ominaisuudet.png"
+					alt="Teksti 'Opiskelija' suunnikkaan sisään kirjoitettuna, suunnikkaan alalaidassa kiinni toinen suunnikas, jossa tekstit 'nimi', 'syntymävuosi' ja 'pääaine' omilla riveillään. ">
+				<figcaption>Käsitteillä voi olla ominaisuuksia. Opiskelija-käsitteeseen liittyy nimi, syntymävuosi, ja
+					pääaine.</figcaption>
+			</figure>
+
+			<p>Myös kurssisuoritukseen liittyy ominaisuuksia. Alla opiskelijaan liittyy useita kurssisuorituksia, jonka
+				lisäksi käsitteisiin liittyvät ominaisuudet on myös merkitty.</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-ja-kurssisuoritus.png"
+					alt="Teksti 'Opiskelija' suunnikkaan sisään kirjoitettuna, Teksti 'Kurssisuoritus' toisen suunnikkaan sisään kirjoitettuna. Suunnikkaiden välille on piirretty viiva, jonka Kurssisuoritus-käsitteen päässä on tähti. Käsitteiden alla on myös niiden ominaisuudet kuten edellisessä kuvassa.">
+				<figcaption>Opiskelijaan liittyy useita kurssisuorituksia. Käsitteille on merkitty myös ominaisuudet.
+				</figcaption>
+			</figure>
+
+
+			<aside class="info">
+				<br />
+
+				<h1>Pientä pohdintaa!</h1>
+				<h4>3. Tehtävä: Piirrä kaavio</h4>
+				<p>Hahmottele paperille seuraavaan kuvaukseen liittyvä kaavio yllä esitetyllä tavalla. Ota siitä kuva ja
+					siirrä GitHubin SQL repositorioon. Mitkä ovat
+					käsitteet, ja miten ne liittyvät toisiinsa?</p>
+
+				<p><em>Opettajalla on useita kursseja, joita hän opettaa. Jokaiseen kurssiin liittyy ajankohta, jolloin
+						kurssi järjestetään, sekä kurssin käyttämä sali.</em></p>
+
+			</aside>
+
+			<p>Käsitteitä ja niiden sisältämää tietoa voidaan ajatella tauluna, jossa jokainen rivi kuvaa yksittäistä
+				käsitteen ilmentymää.</p>
+
+			<div class="data-table">
+				<h4>Opiskelija</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>nimi</th>
+							<th>syntymävuosi</th>
+							<th>pääaine</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Pihla</td>
+							<td>1997</td>
+							<td>ICT</td>
+						</tr>
+						<tr>
+							<td>Joni</td>
+							<td>1993</td>
+							<td>ICT</td>
+						</tr>
+						<tr>
+							<td>Anna</td>
+							<td>1991</td>
+							<td>Sähkö</td>
+						</tr>
+						<tr>
+							<td>Krista</td>
+							<td>1990</td>
+							<td>ICT</td>
+						</tr>
+						<tr>
+							<td>Matti</td>
+							<td>1970</td>
+							<td>Sähkö</td>
+						</tr>
+						<tr>
+							<td>Gandhi</td>
+							<td>1869</td>
+							<td>Matkailu</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<p>Vastaavasti myös kurssisuorituksia kuvaamaan voisi tehdä oman erillisen taulun.</p>
+
+			<h2>Tietokannanhallintajärjestelmä</h2>
+
+			<p>Tietokanta sijaitsee tyypillisesti tietokannanhallintajärjestelmässä, jonka kautta tietokantaan pääsee
+				käsiksi. Tietokannanhallintajärjestelmän vastuulla on tietokantaan kohdistuvien haku-, muokkaus- ja
+				lisäystoimintojen toiminnan lisäksi käyttöoikeuksien valvominen. Yksittäisessä
+				tietokannanhallintajärjestelmässä voi kustannus- ja tehokkuussyistä sijaita useisiin erilaisiin
+				sovelluksiin ja käyttötarkoituksiin liittyviä tietokantoja, joita jokaista käyttää eri käyttäjät tai eri
+				yritys.</p>
+
+			<p>Yksittäinen sovellus voi käyttää myös useampaa tietokantaa, jotka sijaitsevat eri
+				tietokannanhallintajärjestelmissä. Tyypillinen esimerkki tällaisesta sovelluksesta on
+				analytiikkapalvelu, joka yhdistää eri palveluiden tallentamaa tietoa yhteenvetoraporttien luomiseksi.
+			</p>
+
+
+			<p>Tietokannanhallintajärjestelmän vastuulla on myös tiedon eheyteen liittyvien sääntöjen noudattamisen
+				valvonta. Tietokannassa voi olla esimerkiksi sääntö "Opiskelijan syntymävuoden tulee sisältää neljä
+				numeroa", jolloin uusien opiskelijoiden lisääminen ilman oikein määriteltyä syntymävuotta ei voida
+				lisätä tietokantaan. Vastaavia sääntöjä voidaan lisätä muunmuassa varausjärjestelmiin, esimerkiksi
+				lentokoneiden paikkavarausjärjestelmissä halutaan varmistaa, että jokaisella istuimella on korkeintaan
+				yksi varaus. Vastaavasti, tietokannanhallintajärjestelmän vastuulla on varmistaa, että tietoa ei
+				tuhoudu, vaikka tietokantaa käyttävä järjestelmä hajoaisi -- erilaiset varmuuskopiotoiminnallisuudet
+				ovat tyypillisiä.</p>
+
+			<p>Tämän lisäksi, tietokannanhallintajärjestelmät tarjoavat tyypillisesti välineitä tiedon hakemiseen
+				liittyvien toimintojen tehokkuuden tarkastelemiseen. Vaikka opintojen seurantaan liittyvä järjestelmämme
+				sisältäisi tiedot kaikista Varian opiskelijoista, sekä kaikista
+				kurssisuorituksista, tulisi tietokantaan tehtävien kyselyjen toimia silti mielekkäässä
+				ajassa. Edellämainittukin tietomäärä on esimerkiksi Amazon-verkkokaupan mittakaavassa hyvin pieni.</p>
+
+			<aside class="extra">
+
+				<h1>Historian siipien havinaa</h1>
+
+				<p>Tiedon tallentamiseen käytettiin alunperin tekstitiedostoja, joiden välillä tietoa pyrittiin
+					yhdistämään joko manuaalisesti tai ohjelmallisesti. Ensimmäisten tietokannanhallintajärjestelmien
+					yhteydessä siirryttiin tiedon todellisen tallennusmuodon abstrahointiin käyttäjältä, ja tietoa
+					käsiteltiin erillisen ohjelmointirajapinnan kautta. Tiedon linkittäminen tapahtui käytännössä
+					muistiviitteiden avulla, jolloin tiedon hakemiseen liittyi näiden muistiviitteiden kautta
+					navigoiminen, johon tarvittiin asiaan erikoistunut ohjelmoija.</p>
+
+
+				<p>Navigointiin perustuvissa järjestelmissä yhtenä ongelmana oli kuitenkin se, että ohjelmoijan tuli
+					korjata järjestelmän navigointirakenne kun rakenne muuttui. Jos tietokannasta poistettiin
+					yksittäinen tietue, saattoi huonoimmassa tapauksessa tietueen kautta löydettävät asiat kadota
+					poiston yhteydessä.</p>
+
+				<p>Koska tiedon hakeminen oli tyypillisesti hidasta, tietoa tallennettiin useampaan paikkaan
+					navigoimisen vähentämiseksi. Kun tietokoneet kehittyivät, toistetun tiedon käyttämistä voitiin
+					vähentää, ja samalla yksittäistä tietokannanhallintajärjestelmää pystyi käyttämään useampi
+					ohjelmoija ja ohjelma. Suurin viimeaikainen kehitysaskel tapahtui kuitenkin relaatiotietomallin
+					esittelyn yhteydessä, missä vastuu navigointiin liittyvien polkujen tekemisestä jätetään täysin
+					ohjelmoijan vastuulle.</p>
+			</aside>
+
+			<h1>Johdanto relaatiomalliin ja relaatiotietokantoihin</h1>
+
+			<p>Relaatiomallin perusajatus on tallennettavan tiedon jakaminen käsitteisiin sekä käsitteiden välisiin
+				yhteyksiin. Jokaista käsitettä vastaa relaatiotietokannassa taulu, ja jokaiselle käsitteen
+				ominaisuudelle eli attribuutille on taulussa oma sarake. Jokainen taulun rivi vastaa yhtä käsitteen
+				ilmentymää, ja tietokantatauluja määriteltäessä taululle määritellään tyypillisesti myös <em>avain</em>,
+				jonka perusteella kukin rivi -- eli käsitteen ilmentymä -- voidaan yksilöidä.</p>
+
+			<p>Kun pohdimme Opiskelija-käsitettä, jolla on nimi, syntymävuosi, ja pääaine, huomaamme, että opiskelijan
+				yksilöinti olemassaolevien tietojen perusteella on lähes mahdotonta. Esimerkiksi vuonna 1991 syntyneitä
+				turvallisuusalaa opiskelevia Anna-nimisiä opiskelijoita löytyy useampia.</p>
+
+			<p>Luodaan Opiskelija-käsitteestä tietokantataulu. Tietokantataulussa opiskelija-käsitteelle määritellään
+				opiskelijan yksilöivä avain, jonka lisäksi muut käsitteeseen liittyvät attribuutit lisätään
+				tietokantataulun sarakkeiksi. Tietokantataulun voi piirtää kaaviona kuten alla -- yksilöivän avaimen voi
+				merkitä joko alleviivaamalla käsitteen, tai merkitsemällä käsitteen eteen merkki <em>(pk)</em>, eli
+				<em>primary key</em>.</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-ja-opiskelijanumero.png"
+					alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]">
+				<figcaption>Opiskelija-taulua luodessa opiskelijaan on lisätty jokaisen opiskelijan yksilöivä avain,
+					tässä tapauksessa opiskelijanumero. Avain on merkitty tekstillä (pk) sen selkeyttämiseksi.
+				</figcaption>
+			</figure>
+
+
+			<p>Tietokantataulussa oleva data voi näyttää esimerkiksi seuraavalta:</p>
+
+			<div class="data-table">
+				<h4>Opiskelija</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>opiskelijanumero</th>
+							<th>nimi</th>
+							<th>syntymävuosi</th>
+							<th>pääaine</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>9999999</td>
+							<td>Pihla</td>
+							<td>1997</td>
+							<td>ICT</td>
+						</tr>
+						<tr>
+							<td>9999998</td>
+							<td>Joni</td>
+							<td>1993</td>
+							<td>ICT</td>
+						</tr>
+						<tr>
+							<td>...</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<p>Opiskelija-käsitteeseen liittyy useampi Kurssisuoritus, mikä näyttää käsitekaaviona seuraavalta --
+				allaolevassa käsitekaaviossa Opiskelijaan on lisätty opiskelijanumero:</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-opiskelijanumerolla-ja-kurssisuoritus.png"
+					alt="Teksti 'Opiskelija' suunnikkaan sisään kirjoitettuna, Teksti 'Kurssisuoritus' toisen suunnikkaan sisään kirjoitettuna. Suunnikkaiden välille on piirretty viiva, jonka Kurssisuoritus-käsitteen päässä on tähti. Käsitteillä myös ominaisuudet. ">
+				<figcaption>Opiskelijaan liittyy yksi tai useampi kurssisuoritus.</figcaption>
+			</figure>
+
+
+			<p>Relaatiotietokannoissa käsitteiden yhdistäminen tapahtuu avainten avulla. Tietokantatauluun Opiskelija on
+				määritelty jokaisen opiskelijan yksilöivä avain <em>opiskelijanumero</em>. Koska jokaiseen opiskelijaan
+				voi liittyä useampi kurssisuoritus, mutta jokaiseen kurssisuoritukseen vain yksi opiskelija, voimme
+				lisätä kurssisuoritustaulua luodessa siihen <em>viiteavaimen</em> (foreign key), joka viittaa
+				opiskelijaan. Kurssisuoritus-tauluun lisätään siis sarake nimeltä opiskelija, joka sisältää aina
+				kurssisuoritukseen liittyvän opiskelijan opiskelijanumeron. Viiteavain merkitään tekstillä
+				<em>(fk)</em>, eli <em>foreign key</em>, ja viiteavaimen nimen jälkeen tulee Taulun nimi, johon
+				viiteavain viittaa.</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-opiskelijanumerolla-ja-kurssisuoritus-taulut.png"
+					alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]1-*[Kurssisuoritus|(fk) opiskelija: Opiskelija;kurssi;päivämäärä;arvosana]">
+				<figcaption>Opiskelijaan liittyy yksi tai useampi kurssisuoritus.</figcaption>
+			</figure>
+
+
+			<p>Tietokantataulussa Kurssisuoritus oleva data näyttää esimerkiksi seuraavalta:</p>
+
+			<div class="data-table">
+				<h4>Kurssisuoritus</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>opiskelija</th>
+							<th>kurssi</th>
+							<th>päivämäärä</th>
+							<th>arvosana</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>9999999</td>
+							<td>Ohjelmoinnin perusteet</td>
+							<td>1.8.2014</td>
+							<td>5</td>
+						</tr>
+						<tr>
+							<td>9999999</td>
+							<td>Ohjelmoinnin jatkokurssi</td>
+							<td>1.8.2014</td>
+							<td>5</td>
+						</tr>
+						<tr>
+							<td>9999999</td>
+							<td>Tietokantojen perusteet</td>
+							<td>20.10.2014</td>
+							<td>3</td>
+						</tr>
+						<tr>
+							<td>...</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>9999998</td>
+							<td>Ohjelmoinnin perusteet</td>
+							<td>1.8.2013</td>
+							<td>4</td>
+						</tr>
+						<tr>
+							<td>...</td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<p>Ylläolevat taulut voidaan määritellä myös tekstimuodossa seuraavasti: </p>
+
+			<ul>
+				<li>Opiskelija((pk) opiskelijanumero, nimi, syntymävuosi, pääaine)</li>
+				<li>Kurssisuoritus((fk) opiskelija -> Opiskelija, kurssi, päivämäärä, arvosana)</li>
+			</ul>
+
+			<p>Opiskelijan opiskelijanumeroon on lisätty määre (pk), sillä se on Opiskelija-taulun avain.
+				Kurssisuoritustaulun merkintä <code>(fk) opiskelija -> Opiskelija</code> taas tarkoittaa, että
+				opiskelija on viiteavain, joka viittaa Opiskelija-taulun avaimeen.</p>
+
+
+			<p>Pohditaan seuraavaksi kyselyiden tekemistä näihin tauluihin.</p>
+
+
+			<h2>SQL-kyselykieli</h2>
+
+			<p>SQL on jo 80-luvulla standardoitu kyselykieli relaatiotietokantojen käsittelyyn. Sen avulla voidaan hakea
+				tietoa tietokannasta, päivittää tietokannassa olevaa tietoa, sekä muokata ja luoda tietokannan
+				rakennetta. Käytännössä kaikki relaatiotietokantoja tukevat tietokannanhallintajärjestelmät käyttävät
+				myös SQL-kieltä. Vuosien mittaan standardista on kuitenkin julkaistu useita versioita, joista tätä
+				kirjoittaessa viimeisin on vuodelta 2011. Eri tietokannanhallintajärjestelmät ja niiden eri versiot
+				noudattelevatkin standardia vaihtelevissa määrin, eivätkä ole täysin yhteensopivia. On siis syytä
+				huomioida että tietokannanhallintajärjestelmästä toiseen vaihdettaessa usein joudutaan tekemään
+				SQL-kyselyihin muutoksia.</p>
+
+			<p>Tässä kurssimateriaalissa keskitymme pääasiassa SQLiten SQL-murteeseen.</p>
+
+			<p>Parhaiten kyselykieltä ymmärtää sitä harjoittelemalla. Sitä teemme tällä kurssilla paljon.</p>
+
+			<aside class="info">
+
+				<br />
+				<h1>Ohjeita SQL-tehtävien tekemiseen</h1>
+
+				<p>Kurssimateriaalissa on tästä kohdasta eteenpäin interaktiivisia SQL-tehtäviä, joiden avulla pääset
+					harjoittelemaan SQL-kyselykielen käyttöä. Materiaali sisältää materiaalin edetessä täydentyvän
+					opiskelijoiden kurssisuorituksia kuvaavan tietokannan, jota käytetään ellei toisin mainita. Lähes
+					jokaisen esimerkkikyselyn voi suorittaa, jolloin kysely ajetaan tietokannassa ja kyselyn tulos
+					näytetään ruudulla. Kyselyn suorittaminen tapahtuu <em>Suorita</em>-nappia painamalla. Muista
+					kopioida suorituksesi, ja tehdä siitä md-tiedosto GitHubiin.</p>
+
+				<p>Useimpien suoritettavien esimerkkien jälkeen avautuu muutama tehtävä, jossa pääset harjoittelemaan
+					esimerkkiä vastaavien kyselyjen tuottamista.</p>
+
+			</aside>
+
+			<div ng-controller="weekOneSqlController">
+
+
+				<h4>SELECT * FROM <em>Taulu</em></h4>
+
+				<p>Avainsanalla <code>SELECT</code> valitaan tietyt sarakkeet kyselyn kohteena olevasta taulusta.
+					Sarakkeet määritellään <code>SELECT</code>-avainsanan jälkeen. Jos ohjelmoija haluaa valita kaikki
+					taulussa olevat sarakkeet, käytetään sarakkeiden valinnassa tähteä (<code>*</code>). Sarakkeiden
+					määrittelyä seuraa avainsana <code>FROM</code>, jonka jälkeen kerrotaan kyselyn kohteena oleva
+					taulu.</p>
+
+				<p>Alla voit kokeilla kyselyn tekemistä aiemmin määriteltyihin <code>Opiskelija</code> ja
+					<code>Kurssisuoritus</code>-tauluihin.</p>
+
+
+				<query db="db" query="SELECT * FROM Opiskelija" editable="false" done="listAllStudentsDone">
+				</query>
+
+				<div ng-show="listAllStudentsDone">
+
+					<h4>4. Tehtävä: Hae kaikki</h4>
+
+					<p>Tee nyt kysely, jolla saat listattua kaikki <code>Kurssisuoritus</code>-taulussa olevat rivit.
+					</p>
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db" valid="SELECT * FROM Kurssisuoritus"></query>
+				</div>
+
+
+
+				<h4>SELECT <em>sarake, toinen</em> FROM <em>Taulu</em></h4>
+
+				<p>Avainsanan <code>SELECT</code> jälkeen voidaan määritellä valittavat sarakkeet. Tähteä käyttämällä
+					valitaan kaikki sarakkeet, mutta ohjelmoija voi valita myös yksittäisiä sarakkeita. Jos tähteä ei
+					käytetä, ja halutaan valita useampia sarakkeita, valittavat sarakkeet erotellaan pilkulla.</p>
+
+
+				<query db="db" query="SELECT nimi, syntymävuosi FROM Opiskelija" editable="false"
+					done="listAllStudentsWithAttributesDone">
+				</query>
+
+				<div ng-show="listAllStudentsWithAttributesDone">
+
+					<h4>5. Tehtävä: Hae kurssien nimet</h4>
+
+					<p>Tee nyt kysely, jolla saat listattua <code>Kurssisuoritus</code>-taulussa olevien kurssien nimet.
+					</p>
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db" valid="SELECT kurssi FROM Kurssisuoritus"></query>
+				</div>
+
+
+				<h4>SELECT <em>DISTINCT</em> <em>sarake</em> FROM <em>Taulu</em></h4>
+
+				<p>Kun haimme edellisessä harjoitteluosiossa Kurssisuoritus-taulussa olevien kurssien nimiä, huomasimme,
+					että muutamat kurssien nimet näkyivät useampaan otteeseen. Tämä johtuu siitä, että kysely valitsee
+					taulun rivit, ja taulussa yksinkertaisesti oli useampia rivejä, joilla esiintyi samat kurssit.</p>
+
+				<p>Avainsanalla <code>DISTINCT</code> voidaan valita vain uniikit vastausrivit. Avainsana
+					<code>DISTINCT</code> tulee avainsanan <code>SELECT</code> jälkeen.</p>
+
+
+				<query db="db" query="SELECT DISTINCT pääaine FROM Opiskelija" editable="false"
+					done="listDistinctMajorsDone">
+				</query>
+
+				<div ng-show="listDistinctMajorsDone">
+
+					<h4>6. Tehtävä: Uniikit rivit</h4>
+
+					<p>Tee nyt kysely, jolla saat listattua <code>Kurssisuoritus</code>-taulussa olevat <em>uniikit</em>
+						kurssit.</p>
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db" valid="SELECT DISTINCT kurssi FROM Kurssisuoritus"></query>
+				</div>
+
+
+
+				<h4>SELECT * FROM <em>Taulu</em> <em>WHERE</em>...</h4>
+
+				<p>Emme tyypillisesti kuitenkaan halua valita kaikkea taulussa olevaa dataa, vaan vain tietyt hakuehdot
+					täyttävän osajoukon. Avainsanan <code>WHERE</code> avulla kyselyille annetaan hakuehtoja.
+					Hakuehtojen perusteella kyselyn tulokseen valitaan vain ne rivit, joissa hakuehdossa määritellyn
+					sarakkeen arvot täyttävät hakuehdon. Hakuehto voi olla esimerkiksi muotoa
+					<code>...WHERE nimi = 'Joni'</code>, jolloin valittaisiin vain ne rivit, joissa sarakkeen
+					<code>nimi</code> arvo on <code>'Joni'</code>.</p>
+
+				<query db="db" query="SELECT * FROM Opiskelija WHERE nimi = 'Joni'" editable="false"
+					done="selectJoniDone">
+				</query>
+
+				<div ng-show="selectJoniDone">
+
+					<h4>7. Tehtävä: Hae nimellä</h4>
+
+					<p>Tee nyt kysely, jolla saat listattua <code>Opiskelija</code>-taulusta kaikki ne opiskelijat,
+						joiden nimi on 'Anna'.</p>
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db" valid="SELECT * FROM Opiskelija WHERE nimi = 'Anna'" done="selectAnnaDone"></query>
+
+
+					<div ng-show="selectAnnaDone">
+						<h4>8. Tehtävä: Hae ehdolla</h4>
+						<p>Tee nyt kysely, jolla saat listattua <code>Kurssisuoritus</code>-taulusta kaikki
+							Pihla-nimisen opiskelijan suoritukset. Voit olettaa, että Opiskelija-taulun sisältö on
+							täsmälleen se, kuin mikä se tähän asti on ollut. Vinkki: millä Pihlan tunnistaa kummassakin
+							taulussa?</p>
+
+						<togglable content="taulut" db="db">
+							<table-info></table-info>
+						</togglable>
+
+						<query db="db" valid="SELECT * FROM Kurssisuoritus WHERE opiskelija = '999999'"></query>
+
+					</div>
+				</div>
+
+
+				<aside class="info">
+					<br />
+					<h1>SQL-kyselyiden kirjainkoko</h1>
+
+					<p>SQL on "case insensitive", eli sillä, että onko kysely kirjoitettu isolla vai pienellä ei ole
+						kyselyn suorituksen kannalta merkitystä. Voimme kirjoittaa komennon <code>SELECT</code> yhtä
+						hyvin muodossa <code>select</code> tai <code>Select</code> -- sama pätee myös taulujen nimille
+						ja attribuuteille.</p>
+
+					<p>Taulussa olevaa dataa tarkasteltaessa kirjainkoolla on yleensä kuitenkin merkitystä. Kun teemme
+						esimerkiksi vertailuoperaatioita merkkijonoille, on merkkijonon kirjoitusasu tärkeä. Kysely
+						<code>SELECT * FROM Opiskelija WHERE nimi = 'Joni'</code> palauttaa vain ne opiskelijat, joiden
+						nimi-kentän arvo on <em>täsmälleen</em> 'Joni'. Jos rivillä olevan nimi-kentän arvo olisi
+						vaikkapa 'joni', ei edellinen kysely valitsisi kyseistä riviä.</p>
+
+					<p>Noudatamme tällä kurssilla seuraavaa käytäntöä:</p>
+
+					<ol>
+						<li>Kaikki SQL-kielen komennot, kuten <code>SELECT</code>, <code>FROM</code> ja
+							<code>WHERE</code>, kirjoitetaan isolla.</li>
+						<li>Taulujen nimet kirjoitetaan isolla alkukirjaimella. Esimerkiksi <code>Opiskelija</code> ja
+							<code>Kurssisuoritus</code>.</li>
+						<li>Taulujen sarakkeet eli attribuutit kirjoitetaan pienellä. Esimerkiksi <code>nimi</code> ja
+							<code>kurssikoodi</code>.</li>
+					</ol>
+
+					<p>Jos haluat tehdä kyselyitä joissa kirjainten koolla ei ole merkitystä, voit yrittää käyttää
+						LOWER() tai UPPER() -funktioita muuttamaan kaikki kirjaimet saman kokoiseksi. Huomioi kuitenkin
+						että käyttämämme SQLite ei oletuksena tue näitä funktioita ei-ascii -merkistöille.</p>
+
+				</aside>
+
+
+				<p>Kyselyissä toimivat myös suurempi kuin <code>&gt;</code> ja pienempi kuin <code>&lt;</code>
+					-operaatiot.</p>
+
+				<p>Jos sarakkeen arvot ovat merkkijonoja, kuten kurssin nimi ja opiskelijan nimi, voi hakuehdossa
+					käyttää myös <code>LIKE</code>-operaatiota. Tämän avulla hakutuloksia voi rajata osittaisen
+					merkkijonon avulla. Esimerkiksi kysely <code>SELECT * FROM Opiskelija WHERE nimi LIKE '%a%'</code>
+					hakee kaikki opiskelijat, joiden nimessä esiintyy a-kirjain.</p>
+
+
+				<query db="db" query="SELECT * FROM Opiskelija WHERE nimi LIKE '%a%'" editable="false"
+					done="listOpiskelijatWithSmallAInName">
+				</query>
+
+				<div ng-show="listOpiskelijatWithSmallAInName">
+
+					<h4>9. Tehtävä: LIKE</h4>
+
+					<p>Tee nyt kysely, jolla saat listattua kaikki Opiskelija-taulussa olevat pääaineet, joissa esiintyy
+						sana "tiede". </p>
+
+					<p>Huom! Tee kysely siten, että näet vain uniikit vastaukset. Kyselyn vastauksessa pitäisi olla vain
+						2 riviä. Kun saat kyselyn toimimaan, kokeile mitä tapahtuu jos muutat 'LIKE'-operaation muotoon
+						'NOT LIKE'.</p>
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db"></query>
+				</div>
+
+			</div>
+
+
+			<aside class="info">
+				<br />
+
+				<h1>Loogiset operaatiot 'ja' ja 'tai'</h1>
+
+				<p>Rajausehtoihin voi myös lisätä loogisia operaatioita kyselyjen tulosten tajaamiseksi. Operaatio 'ja',
+					eli kahden rajausehdon yhdistäminen, toimii avainsanalla <code>AND</code>. Esimerkiksi kysely
+					<code>SELECT * FROM Kurssisuoritus WHERE kurssi = 'Ohjelmoinnin perusteet' AND arvosana = 5</code>
+					listaisi vain ne Ohjelmoinnnin perusteet -kurssin suoritukset, missä arvosana on 5.</p>
+
+				<p>Operaation 'tai' lisääminen on myös mahdollista. Esimerkiksi kysely
+					<code>SELECT * FROM Kurssisuoritus WHERE kurssi = 'Ohjelmoinnin perusteet' OR kurssi = 'Ohjelmoinnin jatkokurssi'</code>
+					listaisi kaikki ne kurssisuoritukset, joissa kurssi on joko ohjelmoinnin perusteet tai ohjelmoinnin
+					jatkokurssi.</p>
+
+				<p>Ehtoja voi myös yhdistää, jonka lisäksi suluilla voi rajata suoritusjärjestystä. Ota selvää mitä
+					kysely
+					<code>SELECT * FROM Kurssisuoritus WHERE (kurssi = 'Ohjelmoinnin perusteet' OR kurssi = 'Ohjelmoinnin jatkokurssi') AND arvosana = 3</code>
+					tekee.</p>
+
+			</aside>
+
+
+			<h2>Erilaiset yhteystyypit</h2>
+
+			<p>Huomaamme, että käsite Kurssisuoritus oikeastaan liittyy kahteen eri asiaan; kurssiin ja kurssin
+				suoritukseen. Eriytetään nämä kaksi käsitettä toisistaan.</p>
+
+			<p>Kurssiin liittyy kurssin yleiset tiedot kuten kurssin nimi, kurssikoodi, sekä kurssin kuvaus.
+				Kurssisuoritus taas liittyy tiettyyn kurssiin, opiskelijaan, päivämäärään, arvosanaan, sekä
+				opintopistemäärään. Opintopistemäärä pidetään osana kurssisuoritusta, sillä joillain kursseilla
+				opintopistemäärä vaihtelee työmäärästä riippuen. Käsite Opiskelija säilyy sellaisenaan.</p>
+
+			<p>Yhteen kurssisuoritukseen liittyy aina yksi kurssi, mutta yhteen kurssiin voi liittyä monta
+				kurssisuoritusta. Käsitekaaviona tämä näyttää seuraavalta:</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-kurssisuoritus-kurssi.png"
+					alt="Opiskelija 1-* Kurssisuoritus *-1 Kurssi" />
+				<figcaption>Jokaisella opiskelijalla voi olla useita kurssisuorituksia, ja jokaiseen kurssisuoritukseen
+					liittyy tasan yksi opiskelija. Jokaiseen kurssisuoritukseen liittyy myös tasan yksi kurssi, ja
+					jokaisella kurssilla voi olla useita kurssisuorituksia.</figcaption>
+			</figure>
+
+			<p>Tutkitaan ensin ylläolevan kaavion osaa, missä kurssisuoritukseen liittyy yksi kurssi ja yhteen Kurssiin
+				monta kurssisuoritusta. Emme hetkeen välitä Opiskelija-käsitteen olemassaolosta. Sekä
+				kurssisuoritukselle että kurssille on määritelty niihin liittyvät attribuutit.</p>
+
+
+			<figure>
+				<img src="img/johdanto/kurssisuoritus-kurssi-attrs.png"
+					alt="[Kurssisuoritus|päivämäärä;arvosana;opintopistemäärä]*-1[Kurssi|nimi;kuvaus]" />
+				<figcaption>Jokaiseen kurssisuoritukseen liittyy yksi kurssi, mutta kurssilla voi olla useampia
+					kurssisuorituksia.</figcaption>
+			</figure>
+
+
+
+
+			<aside class="info">
+				<br />
+				<h1>Yhteystyyppi yhden suhde moneen</h1>
+
+				<p>Kahden käsitteen välillä on yhden suhde moneen (<code>1-N</code>) -yhteys, jos ensimmäisen käsitteen
+					ilmentymään voi liittyä monta toisen käsitteen ilmentymää, mutta yhteen toisen käsitteen ilmentymään
+					voi liittyä vain yksi ensimmäisen käsitteen ilmentymä.</p>
+
+				<p>Esimerkiksi <em>Olli Opiskelijaan</em> voi liittyä monta erilaista kurssisuoritusta, mutta tiettyyn
+					kurssisuoritukseen voi liittyä aina vain yksi opiskelija, joka jossain tapauksessa <em>voi</em> olla
+					Olli Opiskelija.</p>
+
+				<p>Saman yhteystyypin voi ajatella myös tietokantataulujen välillä. Kahden taulun välillä on yhteys
+					yhden suhde moneen, jos yhteen ensimmäisen taulun riviin voi liittyä useita toisen taulun rivejä,
+					mutta yhteen toisen taulun riviin voi liittyä vain yksi ensimmäisen taulun rivi.</p>
+
+				<p><em>Tietokantataulujen luominen</em></p>
+
+				<figure>
+					<img src="img/viikko2/yhdesta-moneen-kasitteet.png" alt="[A]1-*[B]" />
+					<figcaption>Yhden suhde moneen. Yhteen A-käsitteeseen voi liittyä monta B-käsitettä, mutta yhteen
+						B-käsitteeseen liittyy aina tasan yksi A-käsite.</figcaption>
+				</figure>
+
+
+				<p>Kun kahden käsitteen välillä on yhden suhde moneen -yhteys, luodaan niiden perusteella
+					tietokantataulut seuraavasti. Luodaan ensin käsitteestä, jonka "viivan päässä" on numero 1,
+					tietokantataulu, ja määritellään sille käsitteen ilmentymät yksilöivä pääavain. Jos käsitteeseen
+					liittyy muita ominaisuuksia tai attribuutteja, asetetaan ne tietokantataulun sarakkeiksi.</p>
+
+				<figure>
+					<img src="img/viikko2/kasite-a-paaavain.png" alt="[A|(pk) id]" />
+					<figcaption>Käsitteen A perusteella luotu tietokantataulu, jolle on määritelty pääavain <em>id</em>.
+					</figcaption>
+				</figure>
+
+				<p>Tämän jälkeen luodaan käsitteestä, jonka "viivan päässä" on tähti, tietokantataulu, ja määritellään
+					sille <em>viiteavain</em>, jonka avulla voimme viitata aiemmin luotuun tauluun.</p>
+
+				<figure>
+					<img src="img/viikko2/kasite-b-viiteavain.png" alt="[B|(fk) a_id: A]" />
+					<figcaption>Käsitteen B perusteella luotu tietokantataulu, jolle on määritelty viiteavain
+						<em>a_id</em>, joka viittaa tauluun A. </figcaption>
+				</figure>
+
+
+				<p>Tämän jälkeen piirretään viiva tietokantataulujen välille.</p>
+
+
+				<figure>
+					<img src="img/viikko2/taulut-a-b.png" alt="[A|(pk) id]1-*[B|(fk) a_id: A]" />
+					<figcaption>Tietokantataulussa A on pääavain <em>id</em>. Tietokantataulussa B on viiteavain
+						<code>a_id</code>, joka viittaa tietokantatauluun A.</figcaption>
+				</figure>
+
+				<p>Yllä kuvattiin, miten yhden suhde moneen -yhteystyypin tapauksessa luodaan käsitekaaviosta
+					tietokantataulut.</p>
+
+			</aside>
+
+
+			<p>Luodaan seuraavaksi Kurssisuorituksesta ja Kurssista tietokantataulut.</p>
+
+
+			<figure>
+				<img src="img/johdanto/kurssisuoritus-kurssi-attrs.png"
+					alt="[Kurssisuoritus|päivämäärä;arvosana;opintopistemäärä]*-1[Kurssi|nimi;kuvaus]" />
+				<figcaption>Jokaiseen kurssisuoritukseen liittyy yksi kurssi, mutta kurssilla voi olla useampia
+					kurssisuorituksia.</figcaption>
+			</figure>
+
+
+			<p>Ensimmäinen askel on tietokantataulun Kurssi luominen sekä sen pääavaimen määrittely. Kurssin nimi ei ole
+				hyvä avain, sillä esimerkiksi kurssin nimi "Tietokone työvälineenä" saattaa toistua eri oppiaineissa ja
+				oppilaitoksissa useiden erilaisten kurssien nimenä. Toisaalta, avaimen on hyvä olla sellainen, että se
+				ei
+				muutu -- (jos avain muuttuisi, kaikki viiteavaimet tulisi myös päivittää) -- kuvauskaan ei ole hyvä
+				avain. Luodaan avainta varten uusi attribuutti, <em>kurssitunnus</em>, ja lisätään se tauluun muiden
+				kurssikäsitteeseen liittyvien attribuuttien kanssa.</p>
+
+
+			<figure>
+				<img src="img/viikko2/kurssi-paaavaimella.png" alt="[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+			</figure>
+
+			<p>Luodaan tämän jälkeen taulu Kurssisuoritus. Koska jokaiseen kurssisuoritukseen liittyy yksi kurssi,
+				luodaan tauluun viiteavain <em>kurssi</em>, joka viittaa Kurssi-tauluun. Muut attribuutit lisätään
+				tauluun viiteavaimen lisäksi.</p>
+
+
+			<figure>
+				<img src="img/viikko2/kurssisuoritus-viiteavaimella.png" alt="[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+			</figure>
+
+			<p>Yhdistetään tietokantataulut vielä viivalla.</p>
+
+
+			<figure>
+				<img src="img/viikko2/kurssisuoritus-ja-kurssi-tietokantataulut.png"
+					alt="[Kurssisuoritus|(fk) kurssi: Kurssi;päivämäärä;arvosana;opintopistemäärä]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+			</figure>
+
+			<p>&nbsp;</p>
+
+			<p><em><strong>Kolmannen tietokantakaulun lisääminen tietokantakaavioon</strong></em></p>
+
+			<p>Tarkastellaan seuraavaa käsitekaaviota, ja tehdään siitä seuraavaksi tietokantakaavio.</p>
+
+			<figure>
+				<img src="img/viikko2/opiskelija-kurssisuoritus-kurssi-luokkakaavio.png" alt="[Opiskelija|opiskelijanumero;nimi;syntymävuosi;pääaine] 1-* [Kurssisuoritus|päivämäärä;arvosana;opintopistemäärä]
+[Kurssisuoritus] *-1 [Kurssi|nimi;kuvaus]" />
+			</figure>
+
+			<p>Teimme edellä jo käsitteistä Kurssi ja Kurssisuoritus tietokantakaavion, joten voimme keskittyä nyt
+				käsitteiden Opiskelija ja Kurssisuoritus väliseen suhteeseen.</p>
+
+
+			<p>Aloitamme taas käsitteestä, jonka viivan päässä on 1, eli tässä tapauksessa opiskelijasta. Kuten aiemmin,
+				käytämme tietokantataululle Opiskelija avaimena opiskelijanumeroa, sillä se yksilöi jokaisen
+				opiskelijan.</p>
+
+			<figure>
+				<img src="img/johdanto/opiskelija-ja-opiskelijanumero.png"
+					alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]">
+			</figure>
+
+			<p>Keskitytään tämän jälkeen viivan toiseen päähän, eli tässä tapauksessa käsitteeseen Kurssisuoritus. Koska
+				yhteen kurssisuoritukseen liittyy tasan yksi opiskelija, lisätään tauluun Kurssisuoritus viiteavain
+				<em>opiskelija</em>, joka viittaa opiskelijaan. Muuten taulu pysyy samana kuten aiemminkin.</p>
+
+			<p>Voimme nyt yhdistää kaikki taulut yhteen, jolloin tietokantakaavio on seuraavanlainen:</p>
+
+			<figure>
+				<img src="img/viikko2/opiskelija-kurssisuoritus-kurssi-tietokantakaavio.png" alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]1-*[Kurssisuoritus|(fk) opiskelija: Opiskelija;(fk) kurssi: Kurssi;päivämäärä;arvosana;opintopistemäärä]
+[Kurssisuoritus]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+			</figure>
+
+
+
+			<aside class="info">
+				<br />
+				<h1>Yhdistelyharjoittelua SQL:llä</h1>
+
+				<p>Käytössämme on nyt edellä luodut tietokantataulut sekä muutamia muita tauluja, mitä luomme kohta.
+					Harjoitellaan tässä välissä hieman kyselyiden tekemistä edellä luotuihin kolmeen tauluun.</p>
+
+				<p>Useamman taulun yhdistäminen tapahtuu <code>WHERE</code>-ehdon avulla esimerkiksi seuraavasti:
+					<code>SELECT * FROM Opiskelija, Kurssisuoritus WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija</code>,
+					eli "Anna kaikki riviyhdistelmät tauluista Opiskelija ja Kurssisuoritus, joissa attribuuttien
+					opiskelijanumero ja opiskelija arvot ovat samat".</p>
+
+				<p>Edellä ehto <code>WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija</code> luo ehdon,
+					missä kyselyn tulokseen valitaan mukaan vain ne rivit, missä Opiskelija-taulun opiskelijanumero on
+					sama kuin Kurssisuoritus-taulun opiskelija. Käytännössä tämä kysely kytkee Opiskelija-taulun
+					pääavaimen ja Kurssisuoritustaulun Opiskelija-tauluun viittaavan viiteavaimen.</p>
+
+				<div ng-controller="weekTwoSqlController">
+					<query db="db"
+						query="SELECT * FROM Opiskelija, Kurssisuoritus WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija"
+						editable="false" done="listOpiskelijatAndKurssisuoritukset">
+					</query>
+
+					<div ng-show="listOpiskelijatAndKurssisuoritukset">
+
+						<h4>10. Tehtävä: Yhdistelyharjoittelua</h4>
+
+						<p>Tee nyt kysely, jolla saat listattua kaikki Kurssit ja niihin liittyvät kurssisuoritukset.
+							Valitse näytettäviksi sarakkeiksi vain kurssin <code>nimi</code> ja kurssisuorituksen
+							<code>päivämäärä</code> ja <code>arvosana</code>.</p>
+
+						<p>Kyselyn tuloksessa pitäisi olla 4 riviä ja 3 saraketta.</p>
+
+						<togglable content="taulut" db="db">
+							<table-info></table-info>
+						</togglable>
+
+						<query db="db"></query>
+					</div>
+				</div>
+
+			</aside>
+
+
+
+
+			<p><strong><em>Yhteystyypit jatkuu: kursseihin liittyy tehtäviä</em></strong></p>
+
+
+			<p>Haluamme, että järjestelmämme voi pitää kirjaa myös kursseihin liittyvistä tehtävistä, joita opiskelija
+				voi suorittaa. Koska kurssiin liittyvien tehtävien määrä voi vaihdella, määritellään yhteys siten, että
+				yhteen kurssiin voi liittyä useita tehtäviä. Toisaalta, koska sama tehtävä voi esiintyä useammalla
+				kurssilla, määritellään yhteys siten, että yhteen tehtävään liittyä useampi kurssi.</p>
+
+
+			<figure>
+				<img src="img/johdanto/tehtava-kurssi.png" alt="[Tehtävä] *-* [Kurssi]" />
+				<figcaption>Tehtävä voi liittyä useampaan kurssiin, ja kurssi voi liittyä useampaan tehtävään.
+				</figcaption>
+			</figure>
+
+			<p>Yllä kuvattu yhteystyyppi on <em>monen suhde moneen</em>.</p>
+
+
+			<aside class="info">
+				<br />
+				<h1>Yhteystyyppi monen suhden moneen</h1>
+
+				<p>Kahden käsitteen välillä on monen suhde moneen (<code>N-N</code>) -yhteys, jos ensimmäisen käsitteen
+					ilmentymään voi liittyä monta toisen käsitteen ilmentymää, ja toisen käsitteen ilmentymään voi
+					liittyä monta ensimmäisen käsitteen ilmentymä.</p>
+
+				<p>Esimerkiksi yhteen kurssiin voi liittyä monta tehtävää, ja yksi tehtävä voi liittyä useampaan
+					kurssiin.</p>
+
+				<p>Saman yhteystyypin voi ajatella myös tietokantataulujen välillä. Kahden taulun välillä on yhteys
+					monen suhde moneen, jos yhteen ensimmäisen taulun riviin voi liittyä useita toisen taulun rivejä, ja
+					yhteen toisen taulun riviin voi liittyä useita ensimmäisen taulun rivejä.</p>
+
+
+				<p><em>Tietokantataulujen luominen</em></p>
+
+				<figure>
+					<img src="img/viikko2/monesta-moneen-a-b.png" alt="[A]*-*[B]" />
+					<figcaption>Monen suhde moneen. Yhteen A-käsitteeseen voi liittyä monta B-käsitettä, ja yhteen
+						B-käsitteeseen voi liittyä monta A-käsitettä.</figcaption>
+				</figure>
+
+
+				<p>Jos käsitteiden välillä on monen suhde moneen -yhteys, luodaan niistä tietokantataulut seuraavasti.
+					Määritellään ensin kummallekin käsitteelle <em>pääavain</em>.
+
+					<figure>
+						<img src="img/viikko2/monesta-moneen-a-b-paaavaimilla.png" alt="[A|(pk) id]
+									      [B|(pk) id]" />
+						<figcaption>Tietokantataulut A ja B. Kummallekin tietokantataululle on määritelty oma taulussa
+							olevan tiedon yksilöivä avain.</figcaption>
+					</figure>
+
+					<p>Kun tietokantatauluille on määritelty pääavaimet, luodaan uusi tietokantataulu, jonka jokainen
+						rivi yhdistää yhden rivin taulusta A yhden taulun B rivin kanssa. Tällaista taulua kutsutaan
+						nimellä <em>liitostaulu</em>, ja se sisältää kaksi viiteavainta: yhden kumpaankin viitattavaan
+						tauluun.</p>
+
+					<figure>
+						<img src="img/viikko2/monesta-moneen-liitostaulu.png"
+							alt="[Liitostaulu|(fk) a_id: A;(fk) b_id: B]" />
+						<figcaption>Liitostaulu sisältää kaksi viiteavainta. Yhden, joka viittaa tauluun A, ja toisen,
+							joka viittaa tauluun B.</figcaption>
+					</figure>
+
+					<p>Yhdistetään seuraavaksi taulut liitostaululla. Liitostaulun jokainen rivi voi viitata vain yhteen
+						taulun A riviin ja yhteen taulun B riviin, joten liitostaulusta lähtevässä yhteydessä taulujen A
+						ja B päätyihin tulee numerot yksi. Toisaalta, liitostaulussa voi olla monta riviä, missä
+						esiintyy viite tiettyyn taulun A riviin -- samoin myös taulun B riviin, joten liitostaulun
+						päähän tulee tähti.</p>
+
+
+
+					<figure>
+						<img src="img/viikko2/monesta-moneen-liitostaulu-yhteydet.png" alt="[A|(pk) id]1-*[Liitostaulu|(fk) a_id: A;(fk) b_id: B]
+										[Liitostaulu]*-1[B|(pk) id]" />
+						<figcaption>Liitostaulun avulla monesta moneen suhde saadaan muutettua kahdeksi yhdestä moneen
+							suhteeksi.</figcaption>
+					</figure>
+
+			</aside>
+
+			<p>Tarkastellaan uudestaan käsitteiden tehtävä ja kurssi yhteyttä, ja muunnetaan käsitekaavio
+				tietokantakaavioksi.</p>
+
+			<figure>
+				<img src="img/johdanto/tehtava-kurssi.png" alt="[Tehtävä] *-* [Kurssi]" />
+			</figure>
+
+
+			<p>Ensimmäinen askel on taulujen luominen sekä niihin liittyvien avainten määrittely. Olemme aiemmin luoneet
+				taulun käsitteestä kurssi, sekä määritelleet sille pääavaimen, joten keskitymme vain taulun Tehtävä
+				luomiseen.</p>
+
+			<p>Määritellään, että tehtävään liittyy <em>nimi</em> ja <em>kuvaus</em>. Kumpikaan niistä ei sovellu
+				tehtävän avaimeksi, joten luodaan tehtävälle avain <em>tunnus</em>, joka yksilöi jokaisen tehtävän.
+				Käsitteestä Tehtävä luotu tietokantataulu on seuraavanlainen:</p>
+
+			<figure>
+				<img src="img/viikko2/tehtava-tietokantataulu.png" alt="[Tehtävä|(pk) tunnus;nimi;kuvaus]" />
+				<figcaption>Tehtävä-taulussa on pääavaimena tunnus, jonka lisäksi sillä on attribuutit nimi ja kuvaus.
+				</figcaption>
+			</figure>
+
+
+			<p>Luodaan seuraavaksi liitostaulu, jonka tehtävänä on yhdistää taulut Tehtävä ja Kurssi. Kutsutaan
+				liitostaulua nimellä Kurssitehtävä. Kurssitehtävä-taululla on kaksi viiteavainta, joista toinen osoittaa
+				tauluun Tehtävä, ja toinen tauluun Kurssi.</p>
+
+			<figure>
+				<img src="img/viikko2/kurssitehtava-liitostaulu.png"
+					alt="[Kurssitehtävä|(fk) tehtävä: Tehtävä; (fk) kurssi: Kurssi]" />
+				<figcaption>Kurssitehtävä-liitostaulussa on kaksi viiteavainta, jotka osoittavat tauluihin Tehtävä ja
+					Kurssi.</figcaption>
+			</figure>
+
+			<p>Lisätään seuraavaksi yhteydet käsitteiden välille -- tämä tapahtuu lähinnä visualisoinnin takia, viitteet
+				ovat todellisuudessa olemassa jo viiteavainten muodossa. Yhteen Kurssitehtävä-taulun riviin liittyy
+				tasan yksi Kurssi-taulun rivi ja Tehtävä-taulun rivi, mutta yksi Kurssi-taulun rivi voi liittyä moneen
+				Kurssitehtävä-taulun riviin -- samoin kuin yksi Tehtävä-taulun rivi voi liittyä moneen
+				Kurssitehtävä-taulun riviin.</p>
+
+			<p>Tietokantakaavio on lopulta seuraavanlainen:</p>
+
+			<figure>
+				<img src="img/viikko2/monesta-moneen-tehtava-kurssitehtava-kurssi.png" alt="[Tehtävä|(pk) tunnus;nimi;kuvaus]1-*[Kurssitehtävä|(fk) tehtävä: Tehtävä; (fk) kurssi: Kurssi]
+										      [Kurssitehtävä]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+				<figcaption>Nyt jos tehtävä on tietyllä kurssilla, on taulussa kurssitehtävä rivi, missä on tehtävän ja
+					kurssin yksilöivä tunnus.</figcaption>
+			</figure>
+
+
+			<aside class="info">
+				<br />
+				<h1>Yhteystyyppi yhden suhde yhteen</h1>
+
+				<p>Yhteystyyppien yhden suhde moneen ja monen suhde moneen lisäksi on myös yhteystyyppi yhden suhde
+					yhteen. Kahden käsitteen välillä on yhden suhde yhteen (<code>1-1</code>) -yhteys, jos ensimmäisen
+					käsitteen ilmentymään voi liittyä vain yksi toisen käsitteen ilmentymä, ja toisen käsitteen
+					ilmentymään voi liittyä vain yksi ensimmäisen käsitteen ilmentymä.</p>
+
+				<p>Esimerkiksi yhdellä opiskelijalla voi olla vain yksi laite lainassa ylläpidolta, ja ylläpito voi
+					lainata tietyn laitteen vain yhdelle opiskelijalle.</p>
+
+				<p>Tämänkin yhteystyypin voi ajatella myös tietokantataulujen välillä. Kahden taulun välillä on yhteys
+					yhden suhde yhteen, jos yhteen ensimmäisen taulun riviin voi liittyä vain yksi toisen taulun rivi,
+					ja yhteen toisen taulun riviin voi liittyä vain yksi ensimmäisen taulun rivi.</p>
+
+				<p><em>Tietokantataulujen luominen</em></p>
+
+				<figure>
+					<img src="img/viikko2/yhden-suhde-yhteen-a-b.png" alt="[A]1-1[B]" />
+					<figcaption>Yhden suhde yhteen. Yhteen A-käsitteeseen voi liittyä vain yksi B-käsite, ja yhteen
+						B-käsitteeseen voi liittyä vain yksi A-käsite.</figcaption>
+				</figure>
+
+
+				<p>Jos käsitteiden välillä on yhden suhde yhteen -yhteys, tyypillisin tapa tietokantataulujen luomiseen
+					on se, että yhdelle käsitteistä määritellään pääavain, ja toiselle viiteavain, jolla viitataan
+					toiseen käsitteeseen.</p>
+
+
+
+				<figure>
+					<img src="img/viikko2/yhden-suhde-yhteen-viitteet.png" alt="[A|(pk) id]1-*[B|(fk) a_id: A]" />
+					<figcaption>Yhden suhde yhteen tietokantakaaviona. Käsitteestä B viitataan käsitteeseen A.
+					</figcaption>
+				</figure>
+
+				<p>Kun pohdimme ylläolevaa tarkemmin, huomaamme, että yllä suoritettiin käytännössä samat askeleet kuin
+					yhden suhde moneen -tapauksessa. Tämä on täysin totta -- käytännössä tietokantaan tulee määritellä
+					viittaavan taulun määrittelyn yhteydessä lisäksi <em>uniikkiusrajoite</em> viiteavaimelle. Palaamme
+					erilaisiin rajoitteisiin myöhemmin kurssilla.</p>
+
+			</aside>
+
+
+			<h2>Useammassa taulussa olevan tiedon yhdistäminen</h2>
+
+
+			<p>Hahmottelimme edellisessä luvussa opiskelun ja oppimisen seuraamiseen tarkoitetun järjestelmämme
+				tietokantaa. Päädyimme yhteystyyppien käsittelyssä kahteen tietokantakaavioon, jotka ovat seuraavat:</p>
+
+
+			<figure>
+				<img src="img/viikko2/opiskelija-kurssisuoritus-kurssi-tietokantakaavio.png" alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]1-*[Kurssisuoritus|(fk) opiskelija: Opiskelija;(fk) kurssi: Kurssi;päivämäärä;arvosana;opintopistemäärä]
+											    [Kurssisuoritus]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+			</figure>
+
+
+			<figure>
+				<img src="img/viikko2/monesta-moneen-tehtava-kurssitehtava-kurssi.png" alt="[Tehtävä|(pk) tunnus;nimi;kuvaus]1-*[Kurssitehtävä|(fk) tehtävä: Tehtävä; (fk) kurssi: Kurssi]
+										      [Kurssitehtävä]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+			</figure>
+
+
+			<p>Voimme yhdistää tietokantakaaviot suoraan, sillä kumpikin kaavio sisältää taulun Kurssi.
+				Tietokantakaavio, missä kaikki taulut ovat yhdessä, näyttää seuraavalta:</p>
+
+
+			<figure>
+				<img src="img/viikko2/tietokantakaavio.png" alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]1-*[Kurssisuoritus|(fk) opiskelija: Opiskelija;(fk) kurssi: Kurssi;päivämäärä;arvosana;opintopistemäärä]
+							   [Kurssisuoritus]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]
+							   [Tehtävä|(pk) tunnus;nimi;kuvaus]1-*[Kurssitehtävä|(fk) tehtävä: Tehtävä; (fk) kurssi: Kurssi]
+							   [Kurssitehtävä]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]" />
+
+			</figure>
+
+			<p>Voit tutkia uudessa esimerkkitietokannassa olevaa tietoa allaolevan SQL-komentotulkin avulla.</p>
+
+
+			<div ng-controller="weekTwoSqlController">
+
+				<togglable content="taulut" db="db">
+					<table-info></table-info>
+				</togglable>
+
+				<query db="db"></query>
+			</div>
+
+
+
+			<p>Tutustuimme aiemmin SQL-kyselyihin, joiden avulla teimme erilaisia kyselyitä yksittäisiin
+				tietokantatauluihin. Tutustutaan seuraavaksi erääseen tapaan useammassa taulussa olevan tiedon
+				yhdistämiseen.</p>
+
+			<p>Aiempaa materiaalia kertaamalla muistamme, että avainsanaa <code>FROM</code> seuraa taulu, josta tietoa
+				haetaan. Voimme määritellä haun kohteeksi useampia tauluja listaamalla ne FROM-avainsanan jälkeen
+				pilkulla eroteltuna seuraavasti <code>SELECT * FROM Opiskelija, Kurssisuoritus</code>. Jos emme kerro
+				miten taulujen rivit yhdistetään, on lopputuloksessa kaikki rivit yhdistettynä kaikkiin riveihin --
+				esimerkiksi jokainen taulun Opiskelija rivi yhdistettynä jokaiseen taulun Kurssisuoritus riviin.</p>
+
+
+			<div ng-controller="weekTwoSqlController">
+				<query db="db" query="SELECT * FROM Opiskelija, Kurssisuoritus" editable="false">
+				</query>
+			</div>
+
+			<p>Yllä esitetyn kyselyn tuottama lopputulos ei ole tyypillisesti tavoiteltu -- jokaiseen opiskelijaan on
+				kytketty jokainen kurssisuoritus, eli kaikilla on kaikki kurssisuoritukset.</p>
+
+			<p>Taulujen yhdistäminen tapahtuu kyselyä rajaavan <code>WHERE</code>-ehdon avulla siten, että taulun
+				pääavainta verrataan siihen viittaavan taulun viiteavaimeen. Esimerkiksi, jos haluamme vain
+				kurssisuoritukset ja niihin liittyvät opiskelijat, hyödynnämme Opiskelija-taulun avainta
+				opiskelijanumero sekä Kurssisuoritus-taulun viiteavainta opiskelija, joka viittaa Opiskelija-taulun
+				pääavaimeen. Käytännössä tämä tapahtuu ehdolla
+				<code>WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija</code>.</p>
+
+			<p>Kokonaisuudessaan lause "Anna kaikki riviyhdistelmät tauluista Opiskelija ja Kurssisuoritus, joissa
+				attribuuttien opiskelijanumero ja opiskelija arvot ovat samat" kirjoitetaan seuraavasti:
+				<code>SELECT * FROM Opiskelija, Kurssisuoritus WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija</code>.
+			</p>
+
+			<div ng-controller="weekTwoSqlController">
+
+				<query db="db"
+					query="SELECT * FROM Opiskelija, Kurssisuoritus WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija"
+					editable="false" done="listOpiskelijatJaKurssisuoritukset">
+				</query>
+
+				<div ng-show="listOpiskelijatJaKurssisuoritukset">
+
+					<h4>11. Tehtävä: Haku useasta taulusta</h4>
+
+					<p>Tee nyt kysely, joka tulostaa jokaisen opiskelijan nimen, kurssisuorituksen päivämäärän, ja
+						kurssisuorituksen arvosanan.</p>
+
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db"></query>
+				</div>
+			</div>
+
+
+			<p><strong><em>Useamman taulun yhdistäminen</em></strong></p>
+
+			<p>Useamman taulun yhdistäminen onnistuu samalla tavalla. Kaikki taulut, jotka haluamme lisätä kyselyyn,
+				tulevat FROM-avainsanan jälkeen. Jos tauluja on useampi, on hyvä varmistaa, että kaikki taulut
+				yhdistetään avainkenttien perusteella, sillä muuten haun vastaus voi olla iso.</p>
+
+			<p>Kun yhdistämme useampia tauluja, päädymme helposti tilanteeseen, missä tuloksessa on myös useampia
+				samannimisiä kenttiä. Esimerkiksi omassa tietokantamäärittelyssämme kenttä nimi löytyy tauluista
+				Tehtävä, Kurssi ja Opiskelija. Voimme määritellä taulun, mihin haettava kenttä liittyy,
+				pisteoperaattorin avulla. Kyselyn <code>SELECT nimi FROM Opiskelija</code> voi siis kirjoittaa myös
+				muodossa <code>SELECT Opiskelija.nimi FROM Opiskelija</code>.</p>
+
+			<p>Voimme toisaalta myös nimetä kentän tulostusmuodon seuraavasti
+				<code>SELECT Opiskelija.nimi AS opiskelija FROM Opiskelija</code>. Edelläoleva kysely hakee
+				Opiskelija-taulusta opiskelijan nimen, mutta tulostaa nimet otsikolla 'opiskelija'. </p>
+
+			<p>Allaoleva kysely listaa jokaiselta opiskelijalta opiskelijan nimen sekä opiskelijan suorittamat kurssit.
+			</p>
+
+			<div ng-controller="weekTwoSqlController">
+
+				<query db="db" query="SELECT Opiskelija.nimi AS opiskelija, Kurssi.nimi AS kurssi
+		    FROM Opiskelija, Kurssisuoritus, Kurssi
+		    WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija
+		    AND Kurssisuoritus.kurssi = Kurssi.kurssitunnus" editable="false" done="listOpiskelijanSuorittamatKurssit">
+				</query>
+
+				<div ng-show="listOpiskelijanSuorittamatKurssit">
+
+					<h4>12. Tehtävä: Tulosten otsikointi</h4>
+
+					<p>Tee nyt kysely, joka tulostaa jokaiseen kurssiin liittyvän tehtävän. Tulostuksen otsikoiden
+						nimien tulee olla 'kurssi' ja 'tehtävä'.</p>
+
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db"></query>
+				</div>
+			</div>
+
+
+			<aside class="info">
+
+				<br />
+				<h1>Taulujen yhdistämisestä</h1>
+
+				<p>Yksi tapa taulujen yhdistämiseen tarvittujen kyselyjen hahmottamiseen on tietokantakaavion
+					katsominen. Jos tavoitteena olisi esimerkiksi etsiä kaikki tehtävät, mitä Joni-niminen opiskelija on
+					saattanut tehdä, ensimmäinen askel on etsiä polku taulusta <code>Tehtävä</code> tauluun
+					<code>Opiskelija</code>.</p>
+
+				<p>Aloitamme siis taulusta <code>Tehtävä</code>, ja etsimme polun tauluun <code>Opiskelija</code>. Jotta
+					pääsemme taulusta Tehtävä tauluun Opiskelija, tulee meidän vierailla tauluissa
+					<code>Kurssitehtävä</code>, <code>Kurssi</code> ja <code>Kurssisuoritus</code>, jota seuraa taulu
+					<code>Opiskelija</code>.</p>
+				<p>Kyselyä muodostaessa on hyvä yhdistää taulu kerrallaan toisiinsa.</p>
+
+				<ol>
+					<li>Yhdistämme ensin taulut Tehtävä ja Kurssitehtävä:
+						<pre class="sh_sql">
+SELECT Tehtävä.nimi AS tehtävä
+    FROM Tehtävä, Kurssitehtävä
+    WHERE Tehtävä.tunnus = Kurssitehtava.tehtävä</pre>
+					</li>
+
+					<li>Yhdistämme seuraavaksi edellisiin tauluihin taulun Kurssi:
+						<pre class="sh_sql">
+SELECT Tehtävä.nimi AS tehtävä
+    FROM Tehtävä, Kurssitehtävä, Kurssi
+    WHERE Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Kurssitehtävä.kurssi = Kurssi.kurssitunnus</pre>
+					</li>
+
+					<li>Seuraavaksi, yhdistämme kurssin kurssisuoritukseen:
+						<pre class="sh_sql">
+SELECT Tehtävä.nimi as tehtävä
+    FROM Tehtävä, Kurssitehtävä, Kurssi, Kurssisuoritus
+    WHERE Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Kurssitehtävä.kurssi = Kurssi.kurssitunnus
+        AND Kurssi.kurssitunnus = Kurssisuoritus.kurssi</pre>
+					</li>
+
+					<li>Ja viimeinkin, saamme yhdistettyä polun opiskelijaan:
+						<pre class="sh_sql">
+SELECT Tehtävä.nimi AS tehtävä
+    FROM Tehtävä, Kurssitehtävä, Kurssi, Kurssisuoritus, Opiskelija
+    WHERE Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Kurssitehtävä.kurssi = Kurssi.kurssitunnus
+        AND Kurssi.kurssitunnus = Kurssisuoritus.kurssi
+        AND Kurssisuoritus.opiskelija = Opiskelija.opiskelijanumero</pre>
+					</li>
+
+					<li>Koska halusimme saada Joniin mahdollisesti liittyvät tehtävät, lisätään haettaviin kenttiin
+						vielä opiskelijan nimi:
+						<pre class="sh_sql">
+SELECT Tehtävä.nimi AS tehtävä
+    FROM Tehtävä, Kurssitehtävä, Kurssi, Kurssisuoritus, Opiskelija
+    WHERE Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Kurssitehtävä.kurssi = Kurssi.kurssitunnus
+        AND Kurssi.kurssitunnus = Kurssisuoritus.kurssi
+        AND Kurssisuoritus.opiskelija = Opiskelija.opiskelijanumero
+        AND Opiskelija.nimi = 'Joni'</pre>
+					</li>
+
+				</ol>
+
+
+			</aside>
+
+			<p>Voit kokeilla juuri rakennettua kyselyä alla.</p>
+
+			<div ng-controller="weekTwoSqlController">
+				<query db="db" query="SELECT Tehtävä.nimi AS Tehtävä
+    FROM Tehtävä, Kurssitehtävä, Kurssi, Kurssisuoritus, Opiskelija
+    WHERE Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Kurssitehtävä.kurssi = Kurssi.kurssitunnus
+        AND Kurssi.kurssitunnus = Kurssisuoritus.kurssi
+        AND Kurssisuoritus.opiskelija = Opiskelija.opiskelijanumero
+        AND Opiskelija.nimi = 'Joni'">
+				</query>
+
+			</div>
+
+
+			<p><strong><em>Opiskelijan tekemät tehtävät</em></strong></p>
+
+			<p>Voimme hakea kurssiin liittyvät tehtävät, kurssiin liittyvät opiskelijat, sekä opiskelijan
+				<em>mahdollisesti</em> tekemät tehtävät, jotka saadaan hakemalla kaikkiin opiskelijan kursseihin
+				liittyvät tehtävät. Emme kuitenkaan saa selville yksittäisen opiskelijen tekemiä tai tekemättä jättämiä
+				tehtäviä. </p>
+
+			<p>Jotta tuleva opintojen seurantaan liittyvä järjestelmämme toimisi mielekkäästi, lisätään tietokantaan
+				mahdollisuus opiskelijan ja tehtyjen tehtävien yhdistämiseen. Voimme yhdistää opiskelijan joko tehtävään
+				tai kurssiin liittyvään tehtävään.</p>
+
+			<p>Jos opiskelija yhdistetään tehtävään, opiskelijan tekemä tehtävä näkyy merkittynä kaikilla tehtävää
+				käyttävillä kursseilla. Tämä ei kuitenkaan ole aina toivottua, sillä tehtäviä käytetään myös
+				kertaamistarkoituksessa. Linkitetään siis opiskelija kurssitehtävään: <em>yksi opiskelija voi suorittaa
+					monta kurssitehtävää, ja yhden kurssitehtävän voi suorittaa monta opiskelijaa</em> -- yhteys on
+				monen suhde moneen -tyyppinen.</p>
+
+			<p>Tiedämme miten toimia. Koska Opiskelija-taulussa on pääavain, avainta ei tarvitse määritellä siihen.
+				Kurssitehtävä-taulussa pääavainta ei ole, joten määritellään sille pääavain -- kutsutaan avainta nimellä
+				<em>tunnus</em>. Luodaan tämän jälkeen liitostaulu, jonka tehtävänä on kytkeä Opiskelija-taulun ja
+				Kurssitehtävä-taulun rivejä, ja sitä kautta pitää kirjaa suorituksista. Kutsutaan liitostaulua nimellä
+				<em>Tehtäväsuoritus</em>, ja määritellään sille viiteavaimet tauluun Opiskelija ja tauluun
+				Kurssitehtävä. Lisätään tämän lisäksi tauluun myös kenttä <em>suoritusaika</em>, johon merkitään
+				tehtävän suoritusaika.</p>
+
+			<p>Taulu Tehtäväsuoritus näyttää seuraavanlaiselta:</p>
+
+			<figure>
+				<img src="img/viikko3/taulu-tehtavasuoritus.png"
+					alt="[Tehtäväsuoritus|(fk) opiskelija: Opiskelija; (fk) tehtävä: Kurssitehtävä; suoritusaika]" />
+			</figure>
+
+			<p>Yhteen tehtäväsuoritukseen liittyy yksi opiskelija, mutta opiskelijalla voi olla monta tehtäväsuoritusta.
+				Samoin, yhteen tehtäväsuoritukseen liittyy yksi kurssitehtävä, mutta yhteen kurssitehtävään voi liittyä
+				monta tehtäväsuoritusta. Kokonaisuudessaan tietokantakaaviomme on nyt seuraavanlainen:</p>
+
+			<figure>
+				<img src="img/viikko3/tietokantakaavio-tehtavasuorituksella.png" alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]1-*[Kurssisuoritus|(fk) opiskelija: Opiskelija;(fk) kurssi: Kurssi;päivämäärä;arvosana;opintopistemäärä]
+[Kurssisuoritus]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]
+[Tehtävä|(pk) tunnus;nimi;kuvaus]1-*[Kurssitehtävä|(pk) tunnus; (fk) tehtävä: Tehtävä; (fk) kurssi: Kurssi]
+[Kurssitehtävä]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]
+[Tehtäväsuoritus|(fk) opiskelija: Opiskelija; (fk) tehtävä: Kurssitehtävä; suoritusaika]
+[Tehtäväsuoritus]*-1[Opiskelija]
+[Tehtäväsuoritus]*-1[Kurssitehtävä]" />
+			</figure>
+
+			<p>&nbsp;</p>
+
+			<p><strong><em>Opiskelijan tekemien tehtävien hakeminen</em></strong></p>
+
+			<p>Nyt opiskelijan tekemien tehtävien hakeminen on suoraviivaisempaa. Hahmotellaan kysely, joka hakee kaikki
+				opiskelijat, jotka ovat tehneet tietokantojen perusteet -kurssin tehtäviä, sekä näiden opiskelijoiden
+				tekemät tehtävät. Muotoillaan tulostus siten, että tuloksessa on opiskelijan nimi ja opiskelijan tekemän
+				tehtävän nimi.</p>
+
+			<p>Aloitetaan hakemalla Kurssi-taulusta kurssi Tietokantojen perusteet.</p>
+
+			<pre class="sh_sql">
+SELECT * FROM Kurssi WHERE nimi = 'Tietokantojen perusteet';
+</pre>
+
+			<p>Kytketään seuraavaksi kyselyn tulos tauluun Kurssitehtävä, eli haetaan kaikki kurssitehtävät, joissa
+				kurssina on Tietokantojen perusteet.</p>
+
+			<pre class="sh_sql">
+SELECT * FROM Kurssi, Kurssitehtävä
+    WHERE Kurssi.nimi = 'Tietokantojen perusteet'
+        AND Kurssi.kurssitunnus = Kurssitehtävä.kurssi;
+</pre>
+
+			<p>Liitetään kyselyyn tämän jälkeen taulu Tehtävä, jonka kautta saamme tehtävien nimet.</p>
+
+			<pre class="sh_sql">
+SELECT * FROM Kurssi, Kurssitehtävä, Tehtävä
+    WHERE Kurssi.nimi = 'Tietokantojen perusteet'
+        AND Kurssi.kurssitunnus = Kurssitehtävä.kurssi
+        AND Tehtävä.tunnus = Kurssitehtävä.tehtävä;
+</pre>
+
+			<p>Tulostetaan välitarkastuksena tehtävien nimet:</p>
+
+			<pre class="sh_sql">
+SELECT Tehtävä.nimi AS Tehtävä
+    FROM Kurssi, Kurssitehtävä, Tehtävä
+    WHERE Kurssi.nimi = 'Tietokantojen perusteet'
+        AND Kurssi.kurssitunnus = Kurssitehtävä.kurssi
+        AND Tehtävä.tunnus = Kurssitehtävä.tehtävä;
+</pre>
+
+
+			<p>Kyselyn tulos on seuraava.</p>
+
+
+			<div class="data-table">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Tehtävä</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Onko tässä rekursio?</td>
+						</tr>
+						<tr>
+							<td>Keksi tehtävä</td>
+						</tr>
+						<tr>
+							<td>Koetus</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+
+			<p>Lisätään kyselyyn tämän jälkeen taulu Tehtäväsuoritus, jonka kautta pääsemme kohta Opiskelija-tauluun.
+			</p>
+
+
+			<pre class="sh_sql">
+SELECT Tehtävä.nimi AS Tehtävä
+    FROM Kurssi, Kurssitehtävä, Tehtävä, Tehtäväsuoritus
+    WHERE Kurssi.nimi = 'Tietokantojen perusteet'
+        AND Kurssi.kurssitunnus = Kurssitehtävä.kurssi
+        AND Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Tehtäväsuoritus.tehtävä = Kurssitehtävä.tunnus;
+</pre>
+
+			<p>Lisätään lopulta kyselyyn vielä Opiskelija-taulu, ja haetaan sieltä opiskelijan nimi. Voit kokeilla
+				tuloksena olevaa kyselyä alla.</p>
+
+
+			<div ng-controller="weekThreeSqlController">
+
+
+				<query db="db" editable="false" done="listTikapeTehtavat" query="SELECT Opiskelija.nimi AS Opiskelija, Tehtävä.nimi AS Tehtävä
+    FROM Kurssi, Kurssitehtävä, Tehtävä, Tehtäväsuoritus, Opiskelija
+    WHERE Kurssi.nimi = 'Tietokantojen perusteet'
+        AND Kurssi.kurssitunnus = Kurssitehtävä.kurssi
+        AND Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Tehtäväsuoritus.tehtävä = Kurssitehtävä.tunnus
+        AND Tehtäväsuoritus.opiskelija = Opiskelija.opiskelijanumero">
+				</query>
+
+				<div ng-show="listTikapeTehtavat">
+
+					<h4>13. Tehtävä: Hakujen jäsentely</h4>
+
+					<p>Tee nyt kysely, joka tulostaa kaikki tehtävät, jotka opiskelija 'Anna' on suorittanut. Tee
+						tulostuksesta sellainen, että yksi sarake sisältää kurssin nimen, ja toinen sarake tehtävän
+						nimen.</p>
+
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<query db="db"></query>
+				</div>
+			</div>
+
+
+			<aside class="info">
+				<br />
+				<h1>Pohdi</h1>
+
+				<h4>14. Tehtävä: pohdintaa taulujen yhdistämisestä</h4>
+
+				<p>Alla on kaksi vaihetta edellisessä esimerkissä rakennetusta kyselystä.</p>
+
+				<pre class="sh_sql">
+SELECT Tehtävä.nimi AS Tehtävä
+    FROM Kurssi, Kurssitehtävä, Tehtävä
+    WHERE Kurssi.nimi = 'Tietokantojen perusteet'
+        AND Kurssi.kurssitunnus = Kurssitehtävä.kurssi
+        AND Tehtävä.tunnus = Kurssitehtävä.tehtävä;</pre>
+
+				<pre class="sh_sql">
+SELECT Opiskelija.nimi AS Opiskelija, Tehtävä.nimi AS Tehtävä
+    FROM Kurssi, Kurssitehtävä, Tehtävä, Tehtäväsuoritus, Opiskelija
+    WHERE Kurssi.nimi = 'Tietokantojen perusteet'
+        AND Kurssi.kurssitunnus = Kurssitehtävä.kurssi
+        AND Tehtävä.tunnus = Kurssitehtävä.tehtävä
+        AND Tehtäväsuoritus.tehtävä = Kurssitehtävä.tunnus
+		AND Tehtäväsuoritus.opiskelija = Opiskelija.opiskelijanumero;</pre>
+
+				<p>Ensimmäisen kyselyn tuloksena on kolme riviä, ja se listaa kaikki tehtävät jotka liittyvät kurssiin
+					'Tietokantojen perusteet'. Miksi kuitenkin toisen kyselyn tuloksena on viisi riviä? Jos kurssiin
+					liittyviä tehtäviä on vain kolme, mistä neljäs ja viides rivi tulee, ja miksi?</p>
+
+
+			</aside>
+
+
+			<h2>Useammassa taulussa olevan tiedon yhdistäminen JOIN-kyselyillä</h2>
+
+			<p>Kyselyssä, missä taulujen rivit yhdistetään WHERE-ehdon ja avainten perusteella, valitaan näytettäväksi
+				vain ne rivit, jotka täyttävät annetun ehdon. Esimerkiksi, voimme hakea kaikki kurssit ja ne tehneet
+				opiskelijat seuraavasti:</p>
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT Kurssi.nimi AS Kurssi, Opiskelija.nimi AS Opiskelija
+    FROM Kurssi, Kurssisuoritus, Opiskelija
+    WHERE Kurssi.kurssitunnus = Kurssisuoritus.kurssi
+        AND Kurssisuoritus.opiskelija = Opiskelija.opiskelijanumero">
+				</query>
+			</div>
+
+
+			<p>Entä jos haluaisimme nähdä myös ne kurssit, joita kukaan ei ole suorittanut? Tämä ei ratkea, ainakaan
+				suoraviivaisesti.</p>
+
+			<p>Vuonna 1992 julkaistu SQL-standardin versio toi mukanaan JOIN-kyselyt, joiden avulla edellä määritelty
+				ongelma ratkeaa -- pienen harjoittelun kautta. Tutustutaan seuraavaksi aiemmin oppimaamme taulujen
+				yhdistämistapaa tukeviin erityyppisiin JOIN-kyselyihin.</p>
+
+			<p><strong><em>INNER JOIN</em></strong></p>
+
+			<p>Aiemmin tutuksi tullut kysely
+				<code>SELECT * FROM Opiskelija, Kurssisuoritus WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija</code>
+				valitsee vastaukseen vain ne rivit, joiden kohdalla ehto <em>Opiskelija.opiskelijanumero =
+					Kurssisuoritus.opiskelija</em> pätee, eli missä Opiskelija-taulun opiskelijanumero-sarakkeen arvo on
+				sama kuin Kurssisuoritus-taulun opiskelija-sarakkeen arvo.</p>
+
+			<p>Edellinen kysely voidaan kirjoittaa myös muodossa
+				<code>SELECT * FROM Opiskelija INNER JOIN Kurssisuoritus ON Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija</code>.
+			</p>
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT * FROM Opiskelija
+    INNER JOIN Kurssisuoritus
+        ON Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija">
+				</query>
+			</div>
+
+			<p>Jos haluamme kyselyyn useampia tauluja, lisätään ne INNER JOIN -komennon avulla kyselyn jatkoksi.
+				Esimerkiksi kaksi seuraavaa kyselyä ovat toiminnallisuudeltaan samankaltaiset.</p>
+
+			<pre class="sh_sql">
+SELECT Kurssi.nimi AS Kurssi, Opiskelija.nimi AS Opiskelija
+    FROM Kurssi, Kurssisuoritus, Opiskelija
+    WHERE Kurssi.kurssitunnus = Kurssisuoritus.kurssi
+        AND Kurssisuoritus.opiskelija = Opiskelija.opiskelijanumero;</pre>
+
+
+			<div ng-controller="weekThreeSqlController">
+				<query db="db" editable="false" query="SELECT Kurssi.nimi AS Kurssi, Opiskelija.nimi AS Opiskelija
+    FROM Kurssi
+    INNER JOIN Kurssisuoritus
+        ON Kurssi.kurssitunnus = Kurssisuoritus.kurssi
+    INNER JOIN Opiskelija
+        ON Kurssisuoritus.opiskelija = Opiskelija.opiskelijanumero">
+				</query>
+
+			</div>
+
+			<p>Kyselyn <em>INNER JOIN</em> avulla voimme siis tehdä kutakuinkin saman työn kuin aiemman WHERE-ehdon
+				avulla, eli valita mukaan vain ne rivit, joiden kohdalla ehto pätee.</p>
+
+			<p><strong><em>LEFT JOIN</em></strong></p>
+
+			<p>Mikä tekee taulujen liitoksesta JOIN-kyselyn avulla WHERE-ehtoa monipuolisemman, on se, että JOIN-kyselyn
+				avulla voidaan määritellä kyselyehtoa täyttämättömille riveille toiminnallisuutta. Avainsanalla
+				<code>LEFT JOIN</code> voidaan määritellä kyselyn tulos sellaiseksi, että ehdon täyttävien rivien
+				lisäksi vastaukseen sisällytetään kaikki FROM-avainsanaa seuraavan taulun rivit, joille liitosehto ei
+				täyttynyt.</p>
+
+			<p>Allaoleva kysely listaa kurssisuorituksia keränneiden opiskelijoiden lisäksi myös opiskelijat, joilla ei
+				ole kurssisuorituksia. Tällöin kurssisuoritukseen liittyvä vastauksen osa jää tyhjäksi.</p>
+
+			<div ng-controller="weekThreeSqlController">
+				<query db="db" editable="false" query="SELECT * FROM Opiskelija
+    LEFT JOIN Kurssisuoritus
+        ON Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija">
+				</query>
+			</div>
+
+			<p>Niiden kurssien listaus, joilla on kävijöitä, tai joilla ei ole kävijöitä onnistuu myös esimerkiksi
+				seuraavasti.</p>
+
+			<div ng-controller="weekThreeSqlController">
+				<query db="db" editable="false" query="SELECT * FROM Kurssi
+    LEFT JOIN Kurssisuoritus
+        ON Kurssi.kurssitunnus = Kurssisuoritus.kurssi">
+				</query>
+			</div>
+
+			<p><strong><em>Liitostyypit lyhyesti</em></strong></p>
+
+			<p>Kyselyn JOIN-tyypin voi muotoilla usealla eri tavalla:</p>
+
+			<ul>
+				<li><code>INNER JOIN</code> -- palauta vain ne rivit, joihin valintaehto kohdistuu.</li>
+				<li><code>LEFT JOIN</code> -- palauta kaikki FROM-komentoa seuraavan taulun rivit, ja liitä niihin LEFT
+					JOIN-komentoa seuraavan taulun rivit niiltä kohdin, kuin se on ON-liitosehdossa määritellyn ehdon
+					mukaan mahdollista</li>
+				<li><code>RIGHT JOIN</code> -- palauta kaikki RIGHT JOIN-komentoa seuraavan taulun rivit, ja liitä
+					niihin FROM-komentoa seuraavan taulun rivit niiltä kohdin, kuin se on ON-liitosehdossa määritellyn
+					ehdon mukaan mahdollista</li>
+				<li><code>FULL JOIN</code> -- palauta kaikki FROM-komentoa seuraavan taulun rivit sekä kaikki FULL
+					JOIN-komentoa seuraavan taulun rivit, ja liitä ne toisiinsa niiltä kohdin, kuin se on
+					ON-liitosehdossa määritellyn ehdon mukaan mahdollista</li>
+			</ul>
+
+			<p><em>Valitettavasti tällä sivulla käytössä oleva kyselyiden harjoitteluun tarkoitettu apuväline ei tue
+					RIGHT JOIN ja FULL JOIN -tyyppisiä kyselyitä.</em></p>
+
+
+			<aside class="info">
+
+				<br />
+
+				<h1>Visuaalinen opas JOIN-kyselyihin</h1>
+
+				<p>C.L. Moffatt on kirjoittanut hyvän yhteenvedon erilaisista JOIN-tyypeistä. Tutustu yhteenvetoon
+					osoitteessa <a href="http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins"
+						target="_blank">http://www.codeproject.com/Articles/33052/Visual-Representation-of-SQL-Joins</a>.
+				</p>
+
+				<figure>
+					<img src="img/viikko3/moffatt-visual_joins.png" alt="pyydä piirtämään seuraavassa miitissä :)" />
+					<p>&nbsp;</p>
+					<figcaption>Yhteenveto erilaisista JOIN-kyselyistä ja niiden merkityksistä joukkojen kautta
+						visualisoituna.</figcaption>
+				</figure>
+
+
+			</aside>
+
+
+			<h2>Tietokantarivien lisääminen ja poistaminen</h2>
+
+			<p>Kyselyiden lisäksi on tärkeää pystyä sekä lisäämään rivejä tauluihin, että poistamaan rivejä tauluista.
+			</p>
+
+			<p><strong><em>Rivien poistaminen taulusta</em></strong></p>
+
+			<p>Rivien poistaminen tietokantataulusta tapahtuu komennon <code>DELETE FROM</code> avulla, mitä seuraa
+				taulun nimi, mistä poistetaan tietoa, sekä <code>WHERE</code>-ehto, millä määritellään ehdot, joihin
+				osuvat rivit poistetaan.</p>
+
+			<p>Esimerkiksi, opiskelija nimeltä 'Gandhi' voidaan poistaa seuraavalla komennolla.</p>
+
+			<pre class="sh_sql">
+DELETE FROM Opiskelija WHERE nimi = 'Gandhi'
+</pre>
+
+
+			<p><strong><em>Rivien lisääminen tauluun</em></strong></p>
+
+			<p>Rivien lisääminen tietokantatauluun tapahtuu komennon <code>INSERT INTO</code> avulla, mitä seuraa
+				kohdetaulun nimi. Taulun jälkeen määritellään sarakkeet, joihin arvot asetetaan, jota seuraa uudelle
+				riville lisättävät arvot.</p>
+
+			<p>Esimerkiksi, uusi Kurssi nimeltä 'Web-selainohjelmointi', jonka kurssitunnus on 582354 lisätään tauluun
+				seuraavalla komennolla. Lisäyksen </p>
+
+			<pre class="sh_sql">
+INSERT INTO Kurssi (kurssitunnus, nimi, kuvaus)
+    VALUES (582354,
+            'Web-selainohjelmointi',
+            'Web-sovellusten selainpuolen toiminnallisuuden toteuttamisen perustekniikoita');
+</pre>
+
+
+			<p>Toisaalta, uuden opiskelijan -- Jack Bowerin -- lisääminen tapahtuu seuraavasti:</p>
+
+			<div ng-controller="weekThreeSqlController">
+				<query db="db" query="INSERT INTO Opiskelija (opiskelijanumero, nimi, syntymävuosi, pääaine)
+    VALUES (123456, 'Jack Bower', 1962, 'e-Spinach')">
+				</query>
+
+				<p>Uusien rivien lisäämiseen on myös toinen merkintätapa. Jos jokaiseen taulun sarakkeeseen ollaan
+					lisäämässä arvo, ei sarakkeiden nimiä tarvitse erikseen kertoa.</p>
+
+				<query db="db" query="INSERT INTO Opiskelija VALUES (123458, 'Maggie Simpson', 1988, 'Genetiikka')">
+				</query>
+
+
+				<query db="db" editable="false" query="SELECT * FROM Opiskelija">
+				</query>
+
+			</div>
+
+
+			<h1>Käsiteanalyysi</h1>
+
+
+			<p>Käsiteanalyysia (conceptual modeling) käytetään tutkittavaan aihepiiriin tai ongelma-alueeseen liittyvien
+				käsitteiden sekä niiden välisten yhteyksien selvittämiseen. Käsite voidaan määritellä löyhästi
+				jonkinlaisena asiana, jonka nykyinen olemassaolo ei vaadi jonkun muun asian olemassaoloa -- jos asia on
+				olemassaoloriippuvainen, se on mahdollisesti hyvä attribuuttiehdokas. Esimerkiksi <em>Henkilön nimi</em>
+				ei ole tässä mielessä käsite, sillä henkilön nimi on riippuvainen henkilön olemassaolosta. Toisaalta,
+				Henkilö taas on käsite, sillä sen olemassaolo ei vaadi jonkun muun asian olemassaoloa. Käsitteet voidaan
+				tyypillisesti myös erottaa toisistaan jollain tavalla, tai niille tulee olla vähintäänkin mahdollista
+				määritellä jonkunlainen yksilöivä tunnus.</p>
+
+			<p>Käsitteiden välisillä yhteyksillä taas tarkoitetaan esimerkiksi käsitteiden välisiä suhteita, esimerkiksi
+				Henkilöllä voi olla sisaruksia sekä vanhemmat, ja henkilö voi vaikkapa opiskella jossain opinahjossa.
+			</p>
+
+			<ol>
+				<li><em>Kartoita käsite-ehdokkaita</em>
+
+					<p>Laadi luettelo tarkasteltavan ilmiön kannalta keskeisistä kohteista tai ilmiöistä, jotka voisivat
+						tulla kyseeseen käsitteinä. Tällaisia voisivat olla toimintaan osallistujat, toiminnan kohteet,
+						toimintaan liittyvät tapahtumat, materiaalit, tuotteet ja välituotteet, toiminnalle edellytyksiä
+						luovat asiat.</p>
+
+					<p>Kartoituksen pohjana voi käyttää vapaamuotoista tekstikuvausta tarkasteltavasta ilmiöstä, jota
+						kutsutaan jatkossa kohdealueeksi (engl. problem domain). Tästä kuvauksesta alleviivataan
+						käsite-ehdokkaita ja kerätään ne luetteloon. Käsite-ehdokkaat esiintyvät kuvauksessa usein
+						substantiiveina. Alustavaa karsintaa voi tehdä sen perusteella, onko asia lainkaan oleellinen
+						mallinnettavan ilmiön kannalta.</p>
+
+				</li>
+
+				<li><em>Karsi ehdokkaita</em>
+
+					<p>Luetteloon saadut ehdokkaat käydään läpi ja arvioidaan voisiko ehdokas tulla kyseeseen
+						käsitteenä. Arvioinnissa tulisi tarkastella:</p>
+
+					<ul>
+						<li>Liittyykö ilmiöön tietosisältöä, joka on välttämätöntä järjestelmän kannalta.</li>
+						<li>Onko asia riittävän tärkeä kohdealueen kannalta.</li>
+					</ul>
+
+					<p>Karsintaa ja ehdokkaiden kartoitusta joudutaan usein tekemään iteratiivisesti. Ensimmäinen
+						karsintakierros ei välttämättä tuota lopullista tulosta.</p>
+
+				</li>
+
+				<li><em>Tunnista käsitteiden väliset yhteydet</em>
+
+					<p>Yhteyksiä voi etsiä vapaamuotoisesta kuvauksesta. Yhteyttä ilmaisevat usein verbit, genetiivit,
+						muut kytkentää kuvaavat ilmaukset. Yhteyksienkin suhteen tulisi miettiä onko yhteys oleellinen
+						tarkasteltavan ilmiön kannalta sekä onko se rakenteellinen eli jollain lailla pysyvä ilmiöiden
+						välinen suhde. Yhteyksiksi otetaan ainoastaan merkitykselliset, pysyvämpiluonteiset suhteet
+						ilmiöiden välillä.</p>
+
+				</li>
+
+				<li><em>Määrittele yhteyksiin liittyvät osallistumisrajoitteet</em>
+
+					<p>Osallistumisrajoitteiden avulla ilmaistaan rakenteellisia sääntöjä. Ne eivät välttämättä tule
+						esiin vapaamuotoisessa kuvauksessa vaan edellyttävät tarkempaa kohdealueen analysointia.</p>
+
+				</li>
+
+
+				<li><em>Täsmennä käsitteitä määrittelemällä attribuutit</em>
+
+					<p>Attribuutteja saattaa löytyä vapaamuotoisesta kuvauksesta, mutta yleensä niiden löytäminen
+						edellyttää lisäselvityksiä kohdealueesta, esimerkiksi toiminnan osapuolten haastatteluja.
+						Attribuuttien kohdalla tulee myös selvittää mihin niitä tarvitaan.</p>
+
+				</li>
+
+			</ol>
+
+
+			<p>Sovelletaan edellisiä askeleita jo nyt tuttuun Uimari-esimerkkiin:</p>
+
+			<aside class="info">
+				<br />
+
+				<p>Uimaseuramme Loch Nessin hirviöt on tähän päivään asti käyttänyt paperia uimareidensa tulosten
+					seuraamiseen ja ylläpitoon. Uimaseuraamme juuri liittynyt valmennuspäällikkö vaatii kirjanpidon
+					nykyaikaistamista, ja haluaa että tulokset tallennetaan tietokoneelle.</p>
+
+				<p>Valmennuspäällikkömme antoi minulle tehtäväksi välittää tietoa seurastamme, eli tässäpä sitä: Meillä
+					on noin sata mies- ja naispuolista uimaria. Uimarit kilpailevat yleensä yhdessä lajissa, esimerkiksi
+					selkäuinnissa, mutta jotkut uimarit kilpailevat useammassakin lajissa. Tuloksia kirjataan sekä
+					kuukausittain järjestettävistä seuran sisäisistä "kuukauden vesihiisi"-kisoista, että jokaisesta
+					seuran ulkopuolella järjestettävästä kilpailusta. Valmentajien tulee pystyä käyttämään tietokoneelle
+					tallennettuja tietoja myös kotoa esimerkiksi internetin välityksellä.</p>
+
+				<p>Mitä mieltä olette edeltävästä järjestelmätarpeesta, olisiko sellainen mahdollista toteuttaa?
+					Pahoittelut kirjoitusvirheistä!</p>
+
+			</aside>
+
+
+			<h2>Käsite-ehdokkaiden kartoitus</h2>
+
+			<p>Eristetään tekstistä keskeiset kohteet, ilmiöt ja käsitteet alleviivaamalla ne tekstistä. Aloitetaan
+				valitsemalla lähes kaikki substantiivit tarkasteltavaksi.</p>
+
+			<aside class="info">
+				<br />
+
+				<p><u>Uimaseuramme</u> Loch Nessin hirviöt on tähän päivään asti käyttänyt <u>paperia</u>
+					<u>uimareidensa</u> <u>tulosten</u> seuraamiseen ja ylläpitoon. <u>Uimaseuraamme</u> juuri liittynyt
+					<u>valmennuspäällikkö</u> vaatii <u>kirjanpidon</u> nykyaikaistamista, ja haluaa että
+					<u>tulokset</u> tallennetaan <u>tietokoneelle</u>.</p>
+
+				<p><u>Valmennuspäällikkömme</u> antoi minulle tehtäväksi välittää tietoa <u>seurastamme</u>, eli tässäpä
+					sitä: Meillä on noin sata <u>mies- ja naispuolista</u> <u>uimaria</u>. <u>Uimarit</u> kilpailevat
+					yleensä yhdessä <u>lajissa</u>, esimerkiksi <u>selkäuinnissa</u>, mutta jotkut uimarit kilpailevat
+					useammassakin <u>lajissa</u>. Tuloksia kirjataan sekä kuukausittain järjestettävistä seuran
+					sisäisistä "kuukauden vesihiisi"-<u>kisoista</u>, että jokaisesta seuran ulkopuolella
+					järjestettävästä <u>kilpailusta</u>. Valmentajien tulee pystyä käyttämään tietokoneelle
+					tallennettuja tietoja myös kotoa esimerkiksi internetin välityksellä.</p>
+
+			</aside>
+
+			<p>Listataan seuraavaksi alleviivatut termit, ja muunnetaan ne samalla yksikkömuotoon.</p>
+
+			<ul>
+				<li>Uimaseura</li>
+				<li>Paperi</li>
+				<li>Uimari</li>
+				<li>Tulos</li>
+				<li>Valmennuspäällikkö</li>
+				<li>Kirjanpito</li>
+				<li>Tietokone</li>
+				<li>Seura</li>
+				<li>Miesuimari</li>
+				<li>Naisuimari</li>
+				<li>Selkäuinti</li>
+				<li>Laji</li>
+				<li>Kilpailu</li>
+			</ul>
+
+
+			<h2>Ehdokkaiden karsinta</h2>
+
+			<p>Karsitaan seuraavaksi ehdokkaita.</p>
+
+
+			<ul>
+				<li><s>Uimaseura</s> -- seuralle tehdään järjestelmää, voidaan jättää pois ainakin toistaiseksi.</li>
+				<li><s>Paperi</s> -- tästä haluttiin päästä eroon, tulokset kirjattiin aiemmin paperille.</li>
+				<li>Uimari</li>
+				<li>Tulos</li>
+				<li><s>Valmennuspäällikkö</s> -- valmennuspäällikkö haluaa uuden järjestelmän, mutta ei oleellinen
+					käsite tietomallin kannalta.</li>
+				<li><s>Kirjanpito</s> -- järjestelmä tulee sisältämään kirjanpidon, mutta kirjanpito ei käsite
+					järjestelmässä.</li>
+				<li><s>Tietokone</s> -- kts. edellinen</li>
+				<li><s>Seura</s> -- kts. uimaseura.</li>
+				<li><s>Miesuimari</s> -- Uimari on valittuna käsitteeksi, sukupuoli voi esim. olla uimarin
+					attribuuttina.</li>
+				<li><s>Naisuimari</s> -- kts. edellinen</li>
+				<li><s>Selkäuinti</s> -- Laji on valittuna käsitteeksi.</li>
+				<li>Laji</li>
+				<li>Kilpailu</li>
+			</ul>
+
+			<p>Ehdokkaiden karsinnan jälkeen seuraavat käsitteet ovat jäljellä:</p>
+
+			<ul>
+				<li>Kilpailu</li>
+				<li>Laji</li>
+				<li>Uimari</li>
+				<li>Tulos</li>
+			</ul>
+
+			<h2>Käsitteiden välisten yhteyksien tunnistaminen</h2>
+
+			<p>Yhteydet tunnistetaan joko tekstistä tai "rivien välistä" aiempaa tietoa käyttämällä. Esimerkiksi lause
+				"Uimarit kilpailevat yleensä yhdessä lajissa.." vihjaavat että (1) uimarit liittyvät lajiin, (2) uimarit
+				liittyvät kilpailuun, ja (3) lajit liittyvät kilpailuun.</p>
+
+			<p>Tämän lisäksi, tulokset liittynevät myös uimariin, kilpailuun ja lajiin. Hahmotellaan käsitekaaviota
+				olemassaolevien käsitteiden perusteella.</p>
+
+			<figure>
+				<img src="img/viikko3/uimari-kasitteet.png" alt="[Uimari]-[Laji]
+[Laji]-[Kilpailu]
+[Kilpailu]-[Uimari]
+[Tulos]-[Uimari]
+[Tulos]-[Laji]
+[Tulos]-[Kilpailu]" />
+				<p>&nbsp;</p>
+				<figcaption>Kun käsitteet on tunnistettu, hahmotellaan niiden välisiä yhteyksiä. Yllä pohdittu erästä
+					mahdollisuutta ongelma-alueen käsitteiden yhteyksiksi.</figcaption>
+			</figure>
+
+
+			<h2>Yhteyksiin liittyvien osallistumisrajoitteiden määrittely</h2>
+
+			<p>Kun yhteydet on määritelty, määritellään niille seuraavaksi osallistumisrajoitteet.
+				Osallistumisrajoitteilla tarkoitetaan "viivojen päissä" olevia rajoitteita, joilla kerrotaan esimerkiksi
+				tieto, että yhteen tietyn käsitteen ilmentymään liittyy korkeintaan yksi toinen tietyn käsitteen
+				ilmentymä.</p>
+
+			<p>Uimari voi osallistua yhteen tai useampaan lajiin, eli uimariin voi liittyä monta lajia. Toisaalta, yhtä
+				lajia voi harrastaa useampi uimari. Kilpailussa voi olla monta lajia, ja lajia voidaan todennäköisesti
+				uida monessa kilpailussa. Kilpailussa voi olla monta uimaria, ja uimari voi uida useammassa kilpailussa.
+				Yksittäiseen tulokseen taas liittyy yksi uimari, yksi laji, ja yksi kilpailu -- mutta, yhteen uimariin
+				voi liittyä monta tulosta, yhteen lajiin voi liittyä monta tulosta, ja yhteen kilpailuun voi liittyä
+				monta tulosta.</p>
+
+			<p>Ehdotus käsitekaavioksi osallistumisrajoitteiden kanssa on seuraavanlainen:</p>
+
+			<figure>
+				<img src="img/viikko3/uimari-kasitteet-rajoitteilla.png" alt="[Uimari]*-*[Laji]
+[Laji]*-*[Kilpailu]
+[Kilpailu]*-*[Uimari]
+[Tulos]*-1[Uimari]
+[Tulos]*-1[Laji]
+[Tulos]*-1[Kilpailu]" />
+				<p>&nbsp;</p>
+				<figcaption>Kun käsitteiden väliset yhteydet on tunnistettu, lisätään yhteyksiin osallistumisrajoitteet.
+					Yllä pohdittu erästä mahdollisuutta osallistumisrajoitteiksi.</figcaption>
+			</figure>
+
+
+			<h2>Attribuuttien määrittely käsitteisiin</h2>
+
+			<p>Käsitteisiin liittyvien attribuuttien määrittely tapahtuu sekä haastatteluiden että ongelma-alueen
+				analyysin kautta. Ongelma-alueen tekstimuotoisesta kuvauksesta tiedämme esimerkiksi, että kilpailuilla
+				on paikka ("paikalliset kilpailut", "seuran ulkopuoliset kilpailut"), mutta toisaalta tekstimuotoinen
+				kuvaus ei esimerkiksi kerro kilpailujen järjestämisajankohdasta. Tieto kilpailun ajankohdasta -- ja sitä
+				kautta tulosten ajankohdasta -- on oleellinen uimareiden kehittymisen seurantaan.</p>
+
+
+			<h1>Ali- ja yhteenvetokyselyt sekä tilastojen luominen</h1>
+
+
+			<p>Osaamme hakea yhdestä tai useammasta tietokantataulusta tietoa, sekä rajata kyselyiden palauttamia
+				tuloksia erilaisilla ehdoilla. On kuitenkin kysymyksiä, joihin vastaaminen nykyisillä työvälineillämme
+				on melko hankalaa. Miten esimerkiksi ratkaisisit seuraavat ongelmat?</p>
+
+			<ul>
+				<li>Mitkä tehtävät ovat sellaisia, joita kursseilla heikommin menestyneet opiskelijat -- esimerkiksi
+					hylätyn arvosanan tai ykkösen saaneet -- eivät ole saaneet tehtyä?</li>
+				<li>Miten haen opiskelijat, jotka eivät ole vielä osallistuneet yhdellekään kurssille?</li>
+				<li>Kuinka monta opiskelijaa pääsi tietyn kurssin läpi?</li>
+				<li>Mikä on jokaisen kurssin keskiarvo?</li>
+			</ul>
+
+			<p>Yhteistä edellä olevilla kysymyksillä on se, että lähes kaikki niistä ovat oikeastaan yhteenvetokyselyjä.
+				Tutustutaan kohta näiden käsittelyyn liittyviin menetelmiin.</p>
+
+			<aside class="info">
+				<br />
+				<h1>SQL-kyselyt lyhyemmiksi</h1>
+
+				<p>Olemme -- tarkoituksella -- käyttäneet SQL-kyselykielestä pidempää kirjoitusasua, missä myös
+					ei-pakollisia komentoja on kirjoitettu kyselyihin niiden selkeyttämiseksi. Jos olet tykästynyt tähän
+					aiemmin käytettyyn runsassanaisempaan kirjoitusasuun, ei siitä tarvitse vaihtaa pois. Alla on
+					kuitenkin esitelty vinkkejä SQL-kyselyiden lyhentämiseksi:</p>
+
+				<ul>
+					<li>
+						<p>Taulujen nimeäminen SQL-kyselyissä.</p>
+						<p>Kirjoittaessamme tauluja yhdisteleviä kyselyjä kuten
+							<code>SELECT * FROM Opiskelija, Kurssisuoritus WHERE Opiskelija.opiskelijanumero = Kurssisuoritus.opiskelija</code>
+							taulujen nimet toistuvat. Tauluja voidaan uudelleennimetä SQL-kyselyissä asettamalla taulun
+							nimen jälkeen kyselyn aikana käytettävän nimi. Seuraavassa esimerkissä taulu Opiskelija on
+							uudelleennimetty <code>o</code>:ksi, ja taulu Kurssisuoritus on uudelleennimetty
+							<code>k</code>:ksi.</p>
+
+						<pre class="sh_sql">
+SELECT * FROM Opiskelija o, Kurssisuoritus k WHERE o.opiskelijanumero = k.opiskelija</pre>
+					</li>
+
+					<li>
+						<p>Sarakkeiden nimeäminen SQL-kyselyissä.</p>
+						<p>Olemme käyttäneet avainsanaa <code>AS</code> taulun sarakkeiden uudelleennimennässä. Kysely
+							<code>SELECT nimi FROM Opiskelija</code> palauttaa sarakkeen, jonka nimi on 'nimi', ja jossa
+							on kaikkien Opiskelija-taulussa olevien opiskelijoiden nimet. Toisaalta, kysely
+							<code>SELECT nimi AS opiskelija FROM Opiskelija</code> nimeää sarakkeen 'nimi' tulostuksessa
+							uudestaan, jolloin sarakkeen 'nimi' otsikoksi tulee 'opiskelija' -- rivit sisältävät
+							opiskelijoiden nimet. Avainsanan <code>AS</code> voi myös jättää pois. Alla oleva kysely
+							tulostaa Opiskelija-taulun nimi-sarakkeen sisällön, mutta siten, että sarakkeen otsikkona on
+							'opiskelija'.</p><br />
+
+						<pre class="sh_sql">
+SELECT nimi opiskelija FROM Opiskelija</pre>
+
+						<p>Sarakkeet erotellaan pilkulla kuten aiemminkin.</p>
+
+						<pre class="sh_sql">
+SELECT nimi opiskelija, syntymävuosi vuosi FROM Opiskelija</pre>
+
+						<p>Kyselyssä voi luonnollisesti sekä lyhentää taulun nimeä, että jättää <code>AS</code>
+							avainsanan pois:</p>
+
+						<pre class="sh_sql">
+SELECT o.nimi opiskelija, k.arvosana
+    FROM Opiskelija o, Kurssisuoritus k
+    WHERE o.opiskelijanumero = k.opiskelija</pre>
+					</li>
+
+					<li>
+						<p>INNER JOIN ja JOIN</p>
+
+						<p>Liitoskyselyn INNER JOIN voi kirjoittaa muodossa JOIN.</p>
+					</li>
+				</ul>
+			</aside>
+
+
+			<h2>Alikyselyt</h2>
+
+			<p>Alikyselyt ovat nimensä mukaan kyselyn osana suoritettavia alikyselyitä, joiden tuloksia käytetään osana
+				pääkyselyä. Pohditaan kysymystä <em>Miten haen opiskelijat, jotka eivät ole vielä osallistuneet
+					yhdellekään kurssille?</em>, ja käytetään siihen ensin aiemmin tutuksi tullutta tapaa, eli LEFT JOIN
+				-kyselyä. Yhdistetään opiskelijaa ja kurssisuoritusta kuvaavat taulut LEFT JOIN-kyselyllä siten, että
+				myös opiskelijat, joilla ei ole suorituksia tulevat mukaan vastaukseen. Tämän jälkeen, jätetään
+				vastaukseen vain ne rivit, joilla kurssisuoritukseen liittyvät tiedot ovat tyhjiä -- tämä onnistuu
+				katsomalla mitä tahansa kurssisuoritus-taulun saraketta, ja tarkistamalla onko se tyhjä, eli
+				<em>null</em>. Tämä onnistuu seuraavasti:</p>
+
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT opiskelijanumero FROM Opiskelija o
+    LEFT JOIN Kurssisuoritus k
+    ON o.opiskelijanumero = k.opiskelija
+    WHERE k.kurssi IS null">
+				</query>
+
+			</div>
+
+			<p>Toinen vaihtoehto edellisen kyselyn toteuttamiseen on toteuttaa kysely, joka hakee kaikki ne opiskelijat,
+				jotka eivät ole kurssisuorituksia saaneiden opiskelijoiden joukossa. Tässä on oleellisesti kaksi
+				kyselyä: (1) hae opiskelijat, joilla on kurssisuoritus, ja (2) hae opiskelijat, jotka eivät ole
+				edellisen kyselyn palauttamassa joukossa.</p>
+
+			<p><strong><em>Alikyselyn toteuttaminen</em></strong></p>
+
+			<p>Alikyselyn toteuttamiseksi voimme määritellä kyselyn WHERE-osaan sarakkeen nimen, jota seuraa avainsana
+				<em>NOT IN</em>, jota taas seuraa suluissa oleva kysely.</p>
+
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT opiskelijanumero FROM Opiskelija o
+    WHERE o.opiskelijanumero
+        NOT IN (SELECT opiskelija FROM Kurssisuoritus)" done="unlockListCoursesWithNoAssignments">
+				</query>
+
+				<div ng-show="unlockListCoursesWithNoAssignments">
+					<h4>15. tehtävä: Alikyselyt</h4>
+					<p>Tee nyt kysely, joka listaa kaikki kurssit, joilla ei ole yhtään tehtävää.</p>
+
+					<query db="db" query="">
+					</query>
+				</div>
+
+			</div>
+
+			<p>Käytännössä alikyselyt tuottavat kyselyn tuloksena taulun, josta pääkyselyssä tehtävä kysely tehdään.
+				Ylläolevassa esimerkissä alikyselyn tuottamassa taulussa on vain yksi sarake, jossa on kurssisuorituksen
+				saaneiden opiskelijoiden opiskelijanumerot.</p>
+
+			<p>Määreen <code>NOT IN</code>, joka tarkastaa että valitut arvot eivät ole alikyselyn tuottamassa taulussa,
+				lisäksi käytössä on määre <code>IN</code>. Määreen <code>IN</code> avulla voidaan luoda ehto, jolla
+				tarkastetaan, että valitut arvot ovat annetussa joukossa tai taulussa. Esimerkiksi alla haetaan kaikki
+				kurssisuoritukset, joissa arvosana on kolme tai viisi.</p>
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT * FROM Kurssisuoritus WHERE arvosana IN (5, 3)">
+				</query>
+			</div>
+
+			<aside class="info">
+				<br />
+
+				<h1>EXISTS ja NOT EXISTS</h1>
+
+				<p>Määreiden IN ja NOT IN lisäksi alikyselyissä voidaan käyttää määreitä EXISTS ja NOT EXISTS, joiden
+					avulla voidaan rajata hakujoukkoa alikyselyssä olevan ehdon perusteella. Voimme esimerkiksi
+					kirjoittaa aiemmin kirjoitetun kursseja suorittamattomia opiskelijoita etsivän kyselyn siten, että
+					jokaisen Opiskelija-taulussa olevan opiskelijanumeron kohdalla tarkistetaan, että sitä ei löydy
+					taulusta Kurssisuoritus.</p>
+
+				<div ng-controller="weekThreeSqlController">
+
+					<query db="db" editable="false" query="SELECT opiskelijanumero FROM Opiskelija o
+    WHERE NOT EXISTS
+        (SELECT opiskelija FROM Kurssisuoritus k
+        WHERE k.opiskelija = o.opiskelijanumero)">
+					</query>
+				</div>
+
+				<p>Edellä oleva kysely tarkistaa jokaisen Opiskelija-taulussa olevan opiskelijanumeron kohdalla ettei
+					sitä löydy Kurssisuoritus-taulun opiskelija-sarakkeesta. Käytännössä -- jos tietokantamoottori ei
+					optimoi kyselyä -- jokainen opiskelija-taulun rivi aiheuttaa uuden kyselyn kurssisuoritus-tauluun,
+					mikä tekee kyselystä tehottoman.</p>
+
+			</aside>
+
+
+			<h2>Yhteenvetokyselyt</h2>
+
+			<p>Yhteenvetokyselyiden avulla kyselyiden tuloksia ryhmitellään sarakkeissa olevien arvojen perusteella,
+				jonka jälkeen luoduille ryhmille tehdään erilaisia yhteenvetokyselyitä. Voimme esimerkiksi haluta
+				selvittää opiskelijoiden määrän pääaineittain ryhmiteltynä -- toisin sanoen, listata pääaineet ja
+				opiskelijalukumäärät. Kyselyn vastauksessa olevan rivien lukumäärän saa komennolla
+				<code>COUNT(<em>sarake</em>)</code>, missä <em>sarake</em> on laskettavan sarakkeen nimi. Ryhmittely
+				tapahtuu komennon <code>GROUP BY</code>-perusteella, jota seuraa sarakkeen nimi, jonka perusteella
+				tulokset ryhmitellään.</p>
+
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT pääaine, COUNT(*) AS lukumäärä
+    FROM Opiskelija GROUP BY pääaine" done="unlockListCountKurssisuorituksetByKurssi">
+				</query>
+
+				<div ng-show="unlockListCountKurssisuorituksetByKurssi">
+					<p>Tee nyt kysely, jolla lasket kurssisuoritus-taulussa olevat kurssisuoritukset kurssin koodin
+						perusteella. Käytä tulostuksessa sarekkeiden nimiä "kurssikoodi" ja "lukumäärä".</p>
+					<query db="db" query=""
+						valid="SELECT kurssi AS kurssikoodi, COUNT(*) lukumäärä FROM Kurssisuoritus GROUP BY kurssi">
+					</query>
+				</div>
+
+				<p>Useampien taulujen yhdistäminen toimii kuten ennen -- valittavat taulut kerrotaan joko FROM
+					-avainsanan jälkeen tai JOIN -avainsanan jälkeen, riippuen kyselytavasta. Ryhmittelykomento tulee
+					mahdollisten WHERE-ehtojen jälkeen. Alla olevassa esimerkissä lasketaan tehtävien määrä eri
+					kursseilla siten, että kurssin nimi haetaan taulusta Kurssi, ja tehtävät haetaan kurssitehtävistä.
+				</p>
+
+				<query db="db" editable="false" query="SELECT k.nimi AS kurssi, COUNT(kt.tunnus) AS tehtäviä FROM Kurssi k, Kurssitehtävä kt
+    WHERE k.kurssitunnus = kt.kurssi GROUP BY k.nimi" done="unlockListCountKurssisuorituksetByKurssiWithName">
+				</query>
+
+
+
+				<div ng-show="unlockListCountKurssisuorituksetByKurssiWithName">
+					<h4>16. Tehtävä: Yhteenvetokysely</h4>
+					<p>Tee nyt kysely, jossa lasket kurssisuoritus-taulussa olevien kurssien suoritukset -- taas koodin
+						perusteella. Tällä kertaa tulostuksessa tulee kuitenkn tulostaa kurssikoodin sijaan kurssin
+						nimi. Käytä sarakkeiden niminä "kurssi" ja "lukumäärä". (Huomaa, että edellisessä osassa
+						katsotaan kurssitehtäviä, tässä kurssisuorituksia!)</p>
+
+
+					<query db="db" query=""
+						valid="SELECT Kurssi.nimi AS kurssi, COUNT(*) lukumäärä FROM Kurssisuoritus, Kurssi WHERE Kurssisuoritus.kurssi = Kurssi.kurssitunnus GROUP BY kurssi">
+					</query>
+				</div>
+
+
+				<p>Edellä olevia tuloksia tarkasteltaessamme, huomaamme, että luku nolla ei esiinny yhdelläkään rivillä.
+					Tämä selittyy kyselyillämme -- olemme valinneet mukaan vain rivit, joilla hakuehdot täyttyvät. Hups.
+					Kirjoitetaan edellinen kysely siten, että otamme huomioon kurssit vaikka niihin ei liittyisikään
+					yhtäkään toisen taulun riviä -- käytämme siis <code>LEFT JOIN</code>-liitosoperaatiota.</p>
+
+				<query db="db" editable="false" query="SELECT k.nimi AS kurssi, COUNT(ks.kurssi) as tehtäviä FROM Kurssi k LEFT JOIN Kurssisuoritus ks
+    ON k.kurssitunnus = ks.kurssi GROUP BY k.nimi" done="unlockLeftJoinKurssiAndKurssisuoritus">
+				</query>
+
+
+				<div ng-show="unlockLeftJoinKurssiAndKurssisuoritus">
+					<h4>17. Tehtävä: LEFT JOIN</h4>
+					<p>Tee nyt LEFT JOIN -operaatiota käyttäen kysely, jolla listaat kurssikohtaiset suorituslukumäärät
+						siten, että myös ne kurssit, joilla ei ole yhtäkään suoritusta otetaan huomioon. Käytä
+						sarakkeiden niminä nimiä "kurssi" ja "lukumäärä".</p>
+
+					<query db="db" query=""
+						valid="SELECT Kurssi.nimi AS kurssi, COUNT(Kurssisuoritus.kurssi) lukumäärä FROM Kurssi LEFT JOIN Kurssisuoritus ON Kurssi.kurssitunnus = Kurssisuoritus.kurssi GROUP BY kurssi">
+					</query>
+
+				</div>
+
+			</div>
+
+			<p><strong><em>Ryhmittely useamman sarakkeen perusteella</em></strong></p>
+
+			<p>Komennolle <code>GROUP BY</code> voi antaa myös useampia sarakkeita, jolloin se ryhmittelee ne annetussa
+				järjestyksessä. Esimerkiksi ryhmittely <code>GROUP BY kurssi, arvosana</code> ryhmittelisi taulussa
+				olevat rivit ensin kurssin perusteella, jonka jälkeen ne vielä ryhmiteltäisiin arvosanan perusteella.
+				Tällöin jokaiselle kurssille tulisi erilliset arvosanaryhmät. Esimerkiksi kurssikohtaiset arvosanat
+				saisi tulostettua seuraavalla kyselyllä:</p>
+
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT k.nimi AS kurssi, ks.arvosana AS arvosana, COUNT (ks.opiskelija) AS lukumäärä
+    FROM Kurssi k, Kurssisuoritus ks WHERE k.kurssitunnus = ks.kurssi
+        GROUP BY k.nimi, ks.arvosana">
+				</query>
+			</div>
+
+			<p>Edellisessä kyselyssä on hieman tylsää se, että kurssien nimet ja arvosanat eivät ole järjestyksessä.</p>
+
+			<p><strong><em>Tulosten järjestäminen</em></strong></p>
+
+			<p>Kyselyn tulokset voi järjestää komennolla <code>ORDER BY</code>, jota seuraa järjestettävät sarakkeet.
+				Sarakkeelle voi antaa myös lisämääreen <code>ASC</code> (<em>ascending</em>), joka kertoo että tulokset
+				tulee järjestää nousevaan järjestykseen, ja <code>DESC</code> (<em>descending</em>), joka kertoo että
+				tulokset tulee järjestää laskevaan järjestykseen. Oletuksena järjestys on nouseva.</p>
+
+			<p>Komento <code>ORDER BY</code> tulee kyselyn loppuun. Järjestetään edellisen kyselyn tulokset.</p>
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT k.nimi AS kurssi, ks.arvosana AS arvosana, COUNT (ks.opiskelija) AS lukumäärä
+    FROM Kurssi k, Kurssisuoritus ks WHERE k.kurssitunnus = ks.kurssi
+        GROUP BY k.nimi, ks.arvosana ORDER BY k.nimi, ks.arvosana DESC">
+				</query>
+			</div>
+
+
+			<p><strong><em>Yhteenvetokyselyissä käytettäviä funktioita</em></strong></p>
+
+			<p>Komento <code>COUNT(<em>sarake</em>)</code> on funktio, jolle annetaan joukko arvoja, ja joka palauttaa
+				niiden pohjalta luodun arvon -- annetun joukon koon eli arvojen lukumäärän. Yhteenvetokyselyiden
+				käytössä on myös nippu muita funktioita, joista seuraavassa listataan muutamia.</p>
+
+
+			<ul>
+				<li>
+					<p>Keskiarvon laskeminen <code>AVG</code></p>
+
+					<p>Funktio <code>AVG</code> laskee sille annettujen arvojen keskiarvon. Esimerkiksi kurssikohtaiset
+						arvosanojen keskiarvot saa laskettua seuraavalla kyselyllä:</p>
+
+					<div ng-controller="weekThreeSqlController">
+
+						<query db="db" editable="false" query="SELECT kurssi, AVG(arvosana) AS keskiarvo
+    FROM Kurssisuoritus GROUP BY kurssi">
+						</query>
+					</div>
+
+				</li>
+
+				<li>
+					<p>Summan laskeminen <code>SUM</code></p>
+
+					<p>Funktio <code>SUM</code> laskee sille annettujen arvojen summan. Esimerkiksi kysely seuraava
+						kysely laskee opiskelijakohtaisen opintopistemäärän.</p>
+
+					<div ng-controller="weekThreeSqlController">
+
+						<query db="db" editable="false" query="SELECT o.nimi AS nimi, SUM(ks.opintopistemäärä) AS opintopisteitä
+    FROM Opiskelija o LEFT JOIN Kurssisuoritus ks
+        ON o.opiskelijanumero = ks.opiskelija
+    WHERE ks.arvosana > 0 GROUP BY o.nimi">
+						</query>
+					</div>
+
+
+					<p>Kuten ehkä huomaat, kysely ei toimi tapauksissa, missä opiskelija on korottanut kurssin
+						arvosanaa, sillä hänellä on tällöin useampia hyväksyttyjä merkintöjä samasta kurssista.</p>
+				</li>
+
+				<li>
+					<p>Pienimmän arvon valitseminen <code>MIN</code></p>
+
+					<p>Funktio <code>MIN</code> valitsee sille annettujen arvojen joukosta pienimmän arvon.</p>
+				</li>
+
+				<li>
+					<p>Suurimman arvon valitseminen <code>MAX</code></p>
+
+					<p>Funktio <code>MAX</code> valitsee sille annettujen arvojen joukosta suurimman arvon.</p>
+				</li>
+			</ul>
+
+			<p><strong><em>Hakutulosten rajaaminen yhteenvetokyselyiden perusteella</em></strong></p>
+
+			<p>Jos haluat rajata yhteenvetokyselyn tuloksen perusteella kyselysi palauttamia rivejä, et voi käyttää
+				<code>WHERE</code>-ehtoa tähän. <code>WHERE</code>-ehdon sijaan joudut käyttämään samankaltaista
+				<code>HAVING</code>-ehtoa. Lisätään esimerkiksi edelliseen <code>SUM</code>-kyselyyn rajoitus että
+				haluamme nähdä vain opiskelijat jotka ovat suorittaneet enemmän kuin 10 opintopistettä.</p>
+
+			<div ng-controller="weekThreeSqlController">
+
+				<query db="db" editable="false" query="SELECT o.nimi AS nimi, SUM(ks.opintopistemäärä) AS opintopisteitä
+    FROM Opiskelija o LEFT JOIN Kurssisuoritus ks
+        ON o.opiskelijanumero = ks.opiskelija
+    WHERE ks.arvosana > 0 GROUP BY o.nimi HAVING opintopisteitä > 10">
+				</query>
+			</div>
+
+
+
+			<p>Kuten esimerkissä näkyy, samassa kyselyssä voi olla sekä <code>WHERE</code>-ehto että
+				<code>HAVING</code>-ehto.</p>
+
+
+			<aside class="info">
+				<br />
+
+				<h1>Funktiot osana kyselyitä, joissa ryhmittelyä ei tehdä</h1>
+
+				<p>Edellämainittuja funktioita voi käyttää osana käytännössä minkälaista kyselyä tahansa, jos kyselyn
+					vastauksessa on selkeä yksittäinen sarake, jonka arvoja funktio käsittelee. Esimerkiksi kaikkien
+					kurssien keskiarvon voi laskea seuraavasti:</p>
+
+				<div ng-controller="weekThreeSqlController">
+
+					<query db="db" editable="false" query="SELECT AVG(arvosana) FROM Kurssisuoritus">
+					</query>
+				</div>
+
+				<p>Tässä on kuitenkin huomioitava se, että jos kyselyssä on useampia sarakkeita, tulee funktion pystyä
+					laskemaan sarakekohtaisia tuloksia -- esimerkiksi ryhmittelyn kautta. Alla oleva kysely on esimerkki
+					kyselystä, joka ei palauta oikeaa tulosta.</p>
+
+				<div ng-controller="weekThreeSqlController">
+
+					<query db="db" editable="false" query="SELECT kurssi, AVG(arvosana) FROM Kurssisuoritus">
+					</query>
+				</div>
+
+			</aside>
+
+
+
+			<h2>Kyselyn tulos on taulu</h2>
+
+			<p>Kaikki SQL-kyselyt tuottavat tuloksena taulun. Taulussa voi olla tasan yksi sarake ja rivi, tai vaikkapa
+				tuhansia rivejä ja kymmeniä sarakkeita. Silloinkin, kun suoritamme yksinkertaisen haun, kuten vaikkapa
+				"Hae kaikki kurssilla 'Tietokantojen perusteet' olevat opiskelijat", on haun tuloksena taulu.</p>
+
+			<p>Kaikki tekemämme SQL-kyselyt ovat liittyneet tauluihin. Emmekö siis voisi tehdä kyselyjä myös
+				vastauksiin? Vastaus on kyllä.</p>
+
+			<p>Esimerkiksi vanhimman (tai vanhimmat, jos tämä ei ole yksikäsitteistä) opiskelijat löytää -- muunmuassa
+				-- etsimällä kaikista pienimmän mahdollisimman syntymävuoden (kyselyn tulos on taulu), jonka jälkeen
+				vastaustaulussa olevaa tulosta kaikkien opiskelijoiden syntymävuosiin.</p>
+
+			<div ng-controller="weekThreeSqlController">
+				<query db="db" editable="false" query="SELECT * FROM Opiskelija
+    WHERE syntymävuosi
+        IN (SELECT MIN(syntymävuosi) FROM Opiskelija)">
+				</query>
+			</div>
+
+
+
+			<h1>Tietokantataulujen luominen ja muokkaaminen</h1>
+
+			<p>Tähän mennessä tietokantataulut ovat olleet valmiiksi annettuna, eikä meidän ole tarvinnut pohtia niiden
+				luomista. Tehdään korjausliike, ja tutustutaan tietokantataulujen -- ja sitä kautta -- oman tietokannan
+				rakenteen määrittelyyn ja luomiseen.</p>
+
+			<h2>Tietokantataulun luominen</h2>
+
+			<p>Tietokantataulu luodaan SQL-komennolla <code>CREATE TABLE</code>, jota seuraa luotavan taulun nimi, ja
+				suluissa attribuuttien eli sarakkeiden nimet sekä niiden tyypit pilkulla eroteltuna. Tyyppien määrittely
+				ei ole kaikissa tietokannanhallintajärjestelmissä pakollista, jolloin tietokannanhallintajärjestelmä
+				käyttää mahdollista oletustyyppiä.</p>
+
+			<p>Luodaan aiemmin tutuksi tullut Opiskelija-taulu.</p>
+
+			<div class="data-table">
+				<h4>Opiskelija</h4>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>opiskelijanumero</th>
+							<th>nimi</th>
+							<th>syntymävuosi</th>
+							<th>pääaine</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>9999999</td>
+							<td>Pihla</td>
+							<td>1997</td>
+							<td>Tietojenkäsittelytiede</td>
+						</tr>
+						<tr>
+							<td>9999998</td>
+							<td>Joni</td>
+							<td>1993</td>
+							<td>Tietojenkäsittelytiede</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+
+			<p>Taulu opiskelija saadaan luotua SQL-komennolla
+				<code>CREATE TABLE Opiskelija (opiskelijanumero, nimi, syntymävuosi, pääaine)</code> -- emme ota vielä
+				kantaa sarakkeiden tietotyyppeihin, vaan määrittelemme vain nimet. Tällöin
+				tietokannanhallintajärjestelmä ottaa vastuun sarakkeiden tyyppien asettamisesta -- jos se on
+				mahdollista. </p>
+
+			<div ng-controller="noTablesSqlController">
+
+				<togglable content="taulut" db="db">
+					<table-info></table-info>
+				</togglable>
+
+				<query editable="false" done="tableOpiskelijaWasCreated" db="db" rows="3"
+					query="CREATE TABLE Opiskelija (opiskelijanumero, nimi, syntymävuosi, pääaine)">
+				</query>
+
+
+				<div ng-show="tableOpiskelijaWasCreated">
+
+					<p>Juuri luotuun tauluun saa lisättyä uusia rivejä komennolla <code>INSERT INTO</code>, jota seuraa
+						taulun nimi, sarakkeet suluissa eroteltuna, sekä uudelle riville asetettavat arvot.</p>
+
+					<query db="db" rows="3" query="INSERT INTO Opiskelija (opiskelijanumero, nimi, syntymävuosi, pääaine)
+    VALUES ('01283581', 'Jack Bower', 1983, 'Tietojenkäsittelytiede')" done="opiskelijaAddedToTableOpiskelija">
+					</query>
+				</div>
+
+				<div ng-show="opiskelijaAddedToTableOpiskelija">
+					<p>Luodussa taulussa olevan tiedon hakeminen tapahtuu kuten ennenkin.</p>
+
+					<query db="db" rows="3" query="SELECT * FROM Opiskelija">
+					</query>
+				</div>
+
+
+				<p><strong><em>Kurssi-taulun luominen</em></strong></p>
+				<h4>18. Tehtävä: Taulun luominen</h4>
+				<p>Luo tietokantaan taulu <code>Kurssi</code>, jolla on sarakkeet <code>kurssitunnus</code>,
+					<code>nimi</code> ja <code>kuvaus</code>.</p>
+
+
+				<togglable content="taulut" db="db">
+					<table-info></table-info>
+				</togglable>
+
+				<query db="db" rows="3" done="tableKurssiWasCreated">
+				</query>
+
+				<div ng-show="tableKurssiWasCreated">
+					<h4>19. Tehtävä: Rivin luominen</h4>
+					<p>Lisää nyt tauluun Kurssi kurssi nimeltä "SQL-kielen perusteet", jonka kurssitunnus on "12345" ja
+						kuvaus "SELECT 'Hei maailma';".</p>
+
+					<query db="db" rows="3" done="newCourseWasInserted">
+					</query>
+
+				</div>
+
+				<div ng-show="newCourseWasInserted">
+
+					<p>Tarkista vielä, että taulun luominen onnistui, ja että uusi kurssi löytyy tietokantataulusta.</p>
+
+					<query db="db" rows="3">
+					</query>
+
+				</div>
+
+
+
+				<aside class="info">
+					<br />
+					<h1>Olemassaolevien taulujen poisto</h1>
+
+					<p>Olemassaolevan taulun poistaminen -- esimerkiksi silloin jos sen nimen on kirjoittanut väärin,
+						onnistuu komennolla <code>DROP TABLE</code>, mitä seuraa taulun nimi.
+				</aside>
+			</div>
+
+
+			<h2>Attribuuttien datatyypit</h2>
+
+			<p>Jokaisella attribuutilla tulee olla nimi sekä datatyyppi. Jos datatyyppiä ei määritellä, voi
+				tietokannanhallintajärjestelmä määritellä sen itse -- esimerkiksi SQLite pyrkii päättelemään attribuutin
+				tyypin dynaamisesti, mutta useimmat tietokannanhallintajärjestelmät eivät tällaista päättelyä tee.</p>
+
+			<p>Tietokantaan säilöttävä tieto voi olla montaa eri muotoa, esimerkiksi merkkijonoja, numeroita,
+				binäärimuodossa olevia tiedostoja, sekä päivämääriä. Tietokannan suunnittelijan tehtävänä on päättää,
+				minkämuotoista dataa missäkin sarakkeessa on.</p>
+
+			<p>Puhekielessä voidaan puhua sarakkeen tyypistä, sillä sarakkeen tyyppi määrää millaista tietoa
+				sarakkeeseen tallennetaan. Käytännössä tietokantataulua luotaessa sarakkeen määrittelyssä annettavat
+				tiedot kertovat tietokannanhallintajärjestelmälle siitä, että minkälaista tietoa sarakkeeseen voidaan
+				lisätä, ja toisaalta samalla minkälaista tietoa sarakkeeseen ei voida lisätä. Sarakkeen tyyppi vaikuttaa
+				myös toiminnallisuuksiin -- esimerkiksi keskiarvon laskeminen merkkijonotyyppisiä arvoja sisältävästä
+				sarakkeesta ei todennäköisesti ole hyödyllistä.</p>
+
+			<p>Tyypilliset datatyypit ovat seuraavat:</p>
+
+			<ul>
+				<li><strong>varchar(n)</strong> korkeintaan <em>n</em> merkin pituinen merkkijono.</li>
+				<li><strong>integer</strong> kokonaisluku</li>
+				<li><strong>float</strong> liukuluku eli desimaaliluku</li>
+				<li><strong>date</strong> päivämäärä, tallentaa vuoden, kuukauden ja päivän</li>
+				<li><strong>timestamp</strong> aikaleima, tallentaa vuoden, kuukauden, päivän, tunnit, minuutit ja
+					sekunnit -- mahdollisesti myös tarkempia arvoja</li>
+			</ul>
+
+			<p>Taulua luodessa sarakkeen tyyppi määritellään lisäämällä datatyypin nimi sarakkeen nimen perään.
+				Esimerkiksi Opiskelija-taulua luodessa opiskelijanumero voitaisiin määritellä kokonaisluvuksi, nimi
+				korkeintaan 200 merkkiä pitkäksi merkkijonoksi, syntymävuosi päivämääräksi ja pääaine korkeintaan 50
+				merkkiä pitkäksi merkkijonoksi seuraavasti:</p>
+
+			<pre class="sh_sql">
+CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer,
+    nimi varchar(200),
+    syntymävuosi date,
+    pääaine varchar(50)
+)
+</pre>
+
+			<p>Nyt -- riippuen käytetystä tietokannanhallintajärjestelmästä -- sarakkeeseen opiskelijanumero ei voisi
+				esimerkiksi lisätä merkkijonoa, sillä se on kokonaisluku. Tämä johtaa tilanteeseen, missä
+				tietokannanhallintajärjestelmä itsessään varoittaa tiedon lisääjää yksinkertaisista virheistä.</p>
+
+
+			<aside class="info">
+				<br />
+
+				<h1>Olemassaolevien attribuuttien datatyypin selvittäminen</h1>
+
+
+				<p>Attribuutin -- tai sarakkeen -- datatyypin kysymiseen tietokannalta <a
+						href="http://stackoverflow.com/questions/13405572/sql-statement-to-get-column-type"
+						target="_blank">ei ole yhtä tapaa</a>, vaan tapa liittyy käytettävään
+					tietokannanhallintajärjestelmään. Käyttämässämme SQLite-versiossa sarakkeen tyypin saa selville
+					kyselyllä <code>PRAGMA TABLE_INFO(<em>TaulunNimi</em>)</code>, missä <em>TaulunNimi</em> on
+					tarkasteltavan taulun nimi.</p>
+
+				<div ng-controller="noTablesSqlController">
+					<h4>20. Tehtävä: Attribuutteja</h4>
+					<p>Luo ensin tarkasteltava tietokantataulu.</p>
+
+					<query db="db" rows="3" done="tableCreated">
+					</query>
+
+					<div ng-show="tableCreated">
+
+
+						<togglable content="taulut" db="db">
+							<table-info></table-info>
+						</togglable>
+
+						<p>Kun tietokantataulu on luotu, saat tarkasteltua sen sisältöä <code>PRAGMA</code>-komennolla.
+						</p>
+
+						<query db="db" rows="3" query="PRAGMA TABLE_INFO(LuodunTaulunNimi)">
+						</query>
+					</div>
+
+				</div>
+			</aside>
+
+
+			<p><strong><em>Kurssi-taulun luominen sarakkeiden tyypeillä</em></strong></p>
+			<h4>21. Tehtävä: PRAGMA</h4>
+			<p>Luo taulu <code>Kurssi</code>, jolla on sarakkeet <code>kurssitunnus</code>, <code>nimi</code> ja
+				<code>kuvaus</code>. Kurssitunnuksen tulee olla kokonaisluku, nimen merkkijono, ja kuvauksen merkkijono.
+			</p>
+
+
+			<div ng-controller="noTablesSqlController">
+
+				<query db="db" rows="3" done="tableCreated">
+				</query>
+
+				<div ng-show="tableCreated">
+
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<p>Varmista vielä PRAGMA-komennolla, että sarakkeiden tyypit ovat halutut.</p>
+
+					<query db="db" rows="3">
+					</query>
+				</div>
+			</div>
+
+
+			<aside class="info">
+				<br />
+				<h1>Tietokannanhallintajärjestelmien datatyyppejä</h1>
+
+				<p>Eri tietokannanhallintajärjestelmät kuten <code>SQLite</code>, <code>MySQL</code> ja
+					<code>PostgreSQL</code> tarjoavat hieman erilaisia datatyyppejä ohjelmoijan käyttöön. Tutustu
+					seuraaviin dokumentteihin, missä näistä kerrotaan enemmän:</p>
+
+
+				<ul>
+					<li><a href="https://www.sqlite.org/datatype3.html"
+							target="_blank">https://www.sqlite.org/datatype3.html</a></li>
+					<li><a href="http://www.postgresql.org/docs/9.4/static/datatype.html"
+							target="_blank">http://www.postgresql.org/docs/9.4/static/datatype.html</a></li>
+					<li><a href="http://www.w3schools.com/sql/sql_datatypes.asp"
+							target="_blank">http://www.w3schools.com/sql/sql_datatypes.asp</a></li>
+				</ul>
+			</aside>
+
+
+			<h2>Rajoitteet ja avaimet</h2>
+
+			<p>Kun olemme aiemmin luoneet tietokantakaavioita käsitekaavioista, olemme määritelleet tietokantatauluille
+				yksilöivän <em>pääavaimen</em>. Pääavain on taulukohtainen tunniste, joka on uniikki jokaiselle taulun
+				riville, jonka lisäksi sen arvo ei saa olla tyhjä (<em>null</em>) millään rivillä. Pääavaimeksi valitaan
+				joko olemassaoleva taulun sarake, tai tauluun luodaan uusi sarake.</p>
+
+			<p><strong><em>Pääavaimen määrittely</em></strong></p>
+
+			<p>Pääavain määritellään tietokantataulun luonnin yhteydessä lisäämällä sarakkeen tyypin perään rajoite
+				<code>PRIMARY KEY</code>. Tämä tarkoittaa, että sarakkeen arvo on uniikki, ja että se ei saa koskaan
+				olla tyhjä. Täydennetään aiempaa opiskelijan määrittelyä siten, että opiskelijanumerosta tehdään
+				Opiskelija-taulun pääavain</p>
+
+
+			<pre class="sh_sql">
+CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer PRIMARY KEY,
+    nimi varchar(200),
+    syntymävuosi date,
+    pääaine varchar(50)
+)
+</pre>
+
+
+			<div ng-controller="noTablesSqlController">
+
+				<p>Kokeillaan edelläolevaa komentoa käytännössä.</p>
+
+				<query db="db" rows="7" done="tableCreated" editable="false" query="CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer PRIMARY KEY,
+    nimi varchar(200),
+    syntymävuosi date,
+    pääaine varchar(50)
+)">
+				</query>
+
+				<div ng-show="tableCreated">
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<p>Lisätään seuraavaksi tietokantatauluun uusi opiskelija nimeltä <code>Ada Lovelace</code>.
+						Seuraavalla komennolla vain tietokantataulun kenttään <code>nimi</code> asetetaan arvo.</p>
+
+					<query db="db" rows="3" query="INSERT INTO Opiskelija (nimi) VALUES ('Ada Lovelace')"
+						done="studentInserted">
+					</query>
+				</div>
+
+				<div ng-show="studentInserted">
+					<h4>22. Tehtävä: Pääavain</h4>
+					<p>Listaa nyt taulussa olevat opiskelijat. Mitä huomaat jos opiskelijoita lisätään tietokantatauluun
+						enemmän?</p>
+
+					<query db="db" rows="3" query="SELECT * FROM Opiskelija" done="studentsListed">
+					</query>
+				</div>
+
+				<div ng-show="studentsListed">
+					<p>Koska tietokantatauluun on määritelty avain, joka on uniikki, ei taulun sarakkeessa
+						<code>opiskelijanumero</code> voi olla kahta samaa arvoa. Kokeile tätä painamalla alla olevaa
+						nappia ensin kerran -- jolloin opiskelija lisätään -- ja sitten vielä toisen kerran. Mitä
+						virheviesti kertoo?</p>
+
+					<query db="db" rows="3" query="INSERT INTO Opiskelija (opiskelijanumero, nimi)
+    VALUES (999, 'Beezow Doo-Doo Zopittybop-Bop-Bop')">
+					</query>
+
+				</div>
+
+			</div>
+
+
+			<aside class="info">
+
+				<br />
+
+				<h1>Pääavaimen arvojen automaattinen luonti</h1>
+
+				<p>Tietyt tietokannanhallintajärjestelmät tarjoavat tuen automaattiselle pääavaimen arvojen luomiselle.
+					Esimerkiksi SQLite luo automaattisesti kokonaislukutyyppiselle sarakkeelle arvoja, jos sarake on
+					määritelty pääavaimeksi, ja ohjelmoija ei tauluun tietoa lisätessään arvoja erikseen määrittele.
+					Vastaava toiminnallisuus löytyy myös useista muista tietokannanhallintajärjestelmistä -- tutustu
+					esimerkiksi <a href="https://mariadb.com/kb/en/mariadb/auto_increment/" target="_blank">MariaDB:n
+						dokumentaatioon asiasta</a>.</p>
+
+			</aside>
+
+			<p><strong><em>Kurssi-taulun luominen sarakkeiden tyypeillä ja pääavaimella</em></strong></p>
+			<h4>23. Tehtävä: Automaattinen pääavain</h4>
+			<p>Luo taulu <code>Kurssi</code>, jolla on sarakkeet <code>kurssitunnus</code>, <code>nimi</code> ja
+				<code>kuvaus</code>. Kurssitunnuksen tulee olla kokonaisluku, nimen merkkijono, ja kuvauksen merkkijono.
+				Tämän lisäksi, kurssitunnuksen tulee olla pääavain.</p>
+
+
+			<div ng-controller="noTablesSqlController">
+
+				<query db="db" rows="6" done="tableCreated">
+				</query>
+
+				<div ng-show="tableCreated">
+
+
+					<togglable content="taulut" db="db">
+						<table-info></table-info>
+					</togglable>
+
+					<p>Seuraavan kyselyn useampaan otteeseen suorittamisen pitäisi epäonnistua, sillä tietokantataulun
+						kurssitunnus-sarakkeen pitäisi olla olla pääavain, ja sen takia uniikki. </p>
+
+					<query db="db" rows="3"
+						query="INSERT INTO Kurssi (kurssitunnus, nimi) VALUES (42, 'Meaning of Life')">
+					</query>
+				</div>
+			</div>
+
+
+			<p>Jokaisella taululla voi olla vain yksi määritelty pääavain. Joskus kuitenkin haluamme, että pääavain
+				liittyy useampaan sarakkeeseen, jolloin sarakkeiden yhdistelmän tulee olla uniikki. Voimme esimerkiksi
+				haluta rajoittaa opiskelijoiden kurssi-ilmoittautumisia siten, että jokainen opiskelija voi ilmoittautua
+				vain kerran tietylle kurssille. Tämä onnistuisi kuvitteellisen <em>KurssiIlmoittautuminen</em>-taulun
+				kautta siten, että taulun pääavaimena toimisi opiskelijanumeron ja kurssin yhdistelmä.</p>
+
+			<pre class="sh_sql">
+CREATE TABLE KurssiIlmoittautuminen
+(
+    opiskelijanumero integer,
+    kurssi integer,
+    PRIMARY KEY (opiskelija, kurssi)
+)
+</pre>
+
+			<p>Nyt taulussa KurssiIlmoittautuminen voi olla vain yksi samanlainen
+				<code>opiskelijanumero</code>-<code>kurssi</code> -arvopari, jolloin opiskelija voi ilmoittautua
+				kurssille vain kerran.</p>
+
+
+			<p><strong><em>Uniikkius ja arvon pakollinen määrittely</em></strong></em>
+
+				<p>Tietokantataulun sarakkeille voidaan määritellä myös muita rajoitteita, kuten se, että sarakkeen
+					arvon tulee olla uniikki, tai että sarakkeessa on pakko olla arvo. Sarakkeen uniikkius määritellään
+					komennolla <code>UNIQUE</code>, joka seuraa tyyppiä. Vastaavasti se, että sarakkeessa on pakko olla
+					arvo määritellään komennolla <code>NOT NULL</code>.</p>
+
+				<p>Jos haluamme esimerkiksi lisätä Opiskelija-tauluun rajoitteet, missä määritellään se, että nimeä ja
+					syntymäaikaa ei saa jättää määrittelemättä, lisätään niihin <code>NOT NULL</code> määreet.</p>
+
+				<pre class="sh_sql">
+CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL,
+    syntymävuosi date NOT NULL,
+    pääaine varchar(50)
+)
+</pre>
+
+				<p>Toisaalta, jos määrittelisimme ylläolevan lisäksi säännöt, joiden mukaan nimen ja syntymävuoden
+					tulisi olla uniikkeja, olisi määrittely seuraava.</p>
+
+				<pre class="sh_sql">
+CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL UNIQUE,
+    syntymävuosi date NOT NULL UNIQUE,
+    pääaine varchar(50)
+)
+</pre>
+
+				<p>Tämä ei kuitenkaan olisi kovin fiksua, sillä yllä määriteltävässä taulussa yhdelläkään opiskelijalla
+					ei saisi olla samaa nimeä jonkun toisen kanssa. Vastaavasti, sama syntymävuosi (tai aika) johtaisi
+					virhetilanteeseen.</p>
+
+
+				<aside class="info">
+					<br />
+					<h1>CHECK</h1>
+
+					<p>Edellämainittujen rajoitteiden lisäksi käytössä on mm. rajoite <code>CHECK</code>, jonka avulla
+						voidaan rajoittaa arvoja esimerkiksi tietylle arvovälille. Voimme esimerkiksi luoda
+						Opiskelija-tauluun säännön, jonka mukaan jokaisen opiskelijanumeron tulee olla suurempi kuin 0.
+					</p>
+
+					<pre class="sh_sql">
+CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer PRIMARY KEY CHECK (opiskelijanumero &gt; 0),
+    nimi varchar(200) NOT NULL,
+    syntymävuosi date NOT NULL,
+    pääaine varchar(50)
+)
+</pre>
+
+					<p>Rajoitteet voidaan määritellä myös sarakemäärittelyiden jälkeen. Tämä on näppärää esimerkiksi
+						silloin, jos rajoitteita on useampia. Tehdään erillinen tarkistus, joss varmistetaan, että
+						jokainen nimi on yli 2 merkkiä pitkä, ja opiskelijanumero on aina suurempi kuin 0.</p>
+
+					<pre class="sh_sql">
+CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL,
+    syntymävuosi date NOT NULL,
+    pääaine varchar(50),
+    CONSTRAINT <em>saannonNimi</em> CHECK (opiskelijanumero &gt; 0 AND LENGTH(nimi) &gt; 2)
+)
+</pre>
+
+					<p><em>Funktion <code>LENGTH</code> kirjoitusasu riippuu järjestelmästä, esimerkiksi MySQL:ssä se
+							kirjoitetaan muodossa <code>LEN</code>.</em></p>
+
+				</aside>
+
+
+
+				<p><strong><em>Viiteavainten määrittely</em></strong></p>
+
+				<aside class="info">
+					<br />
+					<h1>SQLite ja viiteavaimet</h1>
+
+					<p>Käytössämme olevan SQLiten kolmosversiossa viiteavaimiin liittyvät tarkistukset ovat oletuksena
+						poissa päältä. Tarkastukset saadaan päälle seuraavalla komennolla:</p>
+
+					<pre class="sh_sql">PRAGMA foreign_keys = ON;</pre>
+
+					<p>Oletamme, että komento on suoritettu.</p>
+
+				</aside>
+
+				<p>Tietokantataulujen viiteavaimet ovat sarakkeita, joissa olevat arvot viittaavat toisissa tauluissa
+					oleviin pääavaimiin. Tietokantataulua määriteltäessä viiteavaimet listataan sarakkeiden määrittelyn
+					jälkeen. Jokaisen viiteavaimen yhteydessä kerrotaan sekä luotavan taulun sarake -- eli sarake, joka
+					on viiteavain -- että taulu ja sarake, johon viiteavaimella viitataan. Viiteavaimen määrittely
+					tapahtuu komennolla
+					<code>FOREIGN KEY(<em>sarake</em>) REFERENCES <em>ViitattavaTaulu(viitattavaSarake)</em></code>.</p>
+
+				<p>Jos tietokantataulut Opiskelija ja Kurssi ovat määritelty seuraavasti:</p>
+
+				<pre class="sh_sql">
+CREATE TABLE Opiskelija
+(
+    opiskelijanumero integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL,
+    syntymävuosi date NOT NULL,
+    pääaine varchar(50)
+);
+
+CREATE TABLE Kurssi
+(
+    kurssitunnus integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL,
+    kuvaus varchar(3000)
+);</pre>
+
+				<p>Voidaan taulu kurssisuoritus, joka viittaa sekä opiskelijaan, että kurssiin, määritellä seuraavasti.
+				</p>
+
+				<pre class="sh_sql">
+CREATE TABLE Kurssisuoritus
+(
+    opiskelija integer NOT NULL,
+    kurssi integer NOT NULL,
+    päivämäärä date NOT NULL,
+    arvosana integer NOT NULL,
+    opintopistemäärä integer NOT NULL,
+    FOREIGN KEY(opiskelija) REFERENCES Opiskelija(opiskelijanumero),
+    FOREIGN KEY(kurssi) REFERENCES Kurssi(kurssitunnus)
+);
+</pre>
+
+				<p>Viiteavaimet ovat siis sarakkeita siinä missä muutkin sarakkeet, mutta niille määritellään erikseen
+					rajoitteet, jotka kertovat, että ne ovat viiteavaimia. Taulussa käytettävien viiteavainten määrä ei
+					käytännössä ole rajattu -- voi olla, että niitä ei ole yhtäkään, tai niitä voi olla useita. Yllä
+					viiteavainsarakkeille <code>opiskelija</code> ja <code>kurssi</code> on lisäksi määritelty
+					<code>NOT NULL</code>-rajoitteet, joiden avulla määritellään että sarakkeiden arvot eivät saa jäädä
+					tyhjiksi.</p>
+
+				<div ng-controller="noTablesSqlController">
+
+					<p>Kokeillaan edellä nähtyä käytännössä. Luodaan ensin tietokantataulut Opiskelija ja Kurssi, sekä
+						lisätään niihin muutama rivi.</p>
+
+					<query db="db" rows="20" editable="false" query="PRAGMA foreign_keys = ON;
+
+CREATE TABLE Opiskelija (
+    opiskelijanumero integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL,
+    syntymävuosi date NOT NULL,
+    pääaine varchar(50)
+);
+
+CREATE TABLE Kurssi (
+    kurssitunnus integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL,
+    kuvaus varchar(3000)
+);
+
+INSERT INTO Opiskelija (nimi, syntymävuosi) VALUES ('Ada', '1997');
+INSERT INTO Opiskelija (nimi, syntymävuosi) VALUES ('Pihla', '1998');
+INSERT INTO Kurssi (nimi) VALUES ('Ohpe');
+INSERT INTO Kurssi (nimi) VALUES ('Tikape');" done="tablesCreated">
+					</query>
+
+					<div ng-show="tablesCreated">
+
+						<p>Nyt käytössämme on taulut Opiskelija ja Kurssi, jonka lisäksi niissä on kummassakin muutama
+							rivi. Luodaan seuraavaksi taulu Kurssisuoritus, jossa on viiteavaimet kumpaankin edellä
+							mainittuun tauluun.</p>
+
+
+						<togglable content="taulut" db="db">
+							<table-info></table-info>
+						</togglable>
+
+						<query db="db" rows="10" editable="false" query="CREATE TABLE Kurssisuoritus
+(
+    opiskelija integer NOT NULL,
+    kurssi integer NOT NULL,
+    päivämäärä date NOT NULL,
+    arvosana integer NOT NULL,
+    opintopistemäärä integer NOT NULL,
+    FOREIGN KEY(opiskelija) REFERENCES Opiskelija(opiskelijanumero),
+    FOREIGN KEY(kurssi) REFERENCES Kurssi(kurssitunnus)
+);" done="kurssisuoritusCreated">
+						</query>
+					</div>
+
+
+					<div ng-show="kurssisuoritusCreated">
+
+						<p>Nyt käytössä on tietokantataulut Opiskelija, Kurssi, ja Kurssisuoritus.
+							Kurssisuoritus-taulussa on kaksi viiteavainta -- toinen viittaa tauluun Opiskelija, ja
+							toinen tauluun Kurssi. Tutki ensin taulujen Opiskelija ja Kurssi sisältöjä, ja lisää sen
+							jälkeen tauluun Kurssisuoritus suoritusmerkintä kurssista Tikape opiskelijalle Ada. Voit
+							kokeilla ensin mitä tapahtuu, jos et aseta viiteavaimia oikein.</p>
+
+						<query db="db" rows="3">
+						</query>
+					</div>
+				</div>
+
+				<p><strong><em>Tehtävän ja Kurssitehtävän lisääminen.</em></strong></p>
+
+				<p>Harjoitellaan edellä nähtyjä asioita vielä hieman. Käytämme pohjana seuraavaa tietokantakaaviota.</p>
+
+				<figure>
+					<img src="img/viikko3/tietokantakaavio-tehtavasuorituksella.png" alt="[Opiskelija|(pk) opiskelijanumero;nimi;syntymävuosi;pääaine]1-*[Kurssisuoritus|(fk) opiskelija: Opiskelija;(fk) kurssi: Kurssi;päivämäärä;arvosana;opintopistemäärä]
+[Kurssisuoritus]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]
+[Tehtävä|(pk) tunnus;nimi;kuvaus]1-*[Kurssitehtävä|(pk) tunnus; (fk) tehtävä: Tehtävä; (fk) kurssi: Kurssi]
+[Kurssitehtävä]*-1[Kurssi|(pk) kurssitunnus;nimi;kuvaus]
+[Tehtäväsuoritus|(fk) opiskelija: Opiskelija; (fk) tehtävä: Kurssitehtävä; suoritusaika]
+[Tehtäväsuoritus]*-1[Opiskelija]
+[Tehtäväsuoritus]*-1[Kurssitehtävä]" />
+
+				</figure>
+
+				<p></p>
+
+				<hr />
+
+				<p>Alla olevaan kyselylaatikkoon on määritelty kysely, minkä avulla luodaan tietokantataulu Kurssi sekä
+					lisätään sinne kurssit Ohpe ja Tikape.</p>
+
+				<div ng-controller="noTablesSqlController">
+
+					<query db="db" rows="11" editable="false" query="PRAGMA foreign_keys = ON;
+
+CREATE TABLE Kurssi (
+    kurssitunnus integer PRIMARY KEY,
+    nimi varchar(200) NOT NULL,
+    kuvaus varchar(3000)
+);
+
+INSERT INTO Kurssi (nimi) VALUES ('Ohpe');
+INSERT INTO Kurssi (nimi) VALUES ('Tikape');" done="tablesCreated">
+					</query>
+
+					<div ng-show="tablesCreated">
+						<h4>24. Tehtävä: Pääavaimet ja viiteavaimet</h4>
+						<p>Toteuta nyt taulut Kurssitehtävä ja Tehtävä siten, että niissä on määriteltynä sekä
+							pääavaimet että viiteavaimet. Pohdi, missä järjestyksessä taulut tulee toteuttaa, jotta saat
+							viiteavaimet määriteltyä oikein.</p>
+
+
+						<togglable content="taulut" db="db">
+							<table-info></table-info>
+						</togglable>
+
+
+						<query db="db" rows="9" query="" done="kurssiTehtavaAndTehtavaCreated">
+						</query>
+					</div>
+
+					<div ng-show="kurssiTehtavaAndTehtavaCreated">
+						<h4>25. Tehtävä: Viitteiden huomioiminen rivejä lisätessä</h4>
+						<p>Lisää nyt Tehtävä-tauluun muutama rivi, ja määrittele olemassaoleville kursseille muutamia
+							tehtäviä.</p>
+
+						<query db="db" rows="4">
+						</query>
+					</div>
+				</div>
+
+
+				<h2>Tietokantataulun muokkaaminen</h2>
+
+				<p>Valitettava totuus on se, että vaikka tekisimme kuinka hienon tietokantasuunnitelman, tulee se
+					muuttumaan ajan myötä erilaisten asiakkailta ja muilta sidosryhmiltä tulevien toiveiden ja tarpeiden
+					perusteella. Tietokantaa ei kannata luoda täysin uudestaan jokaisen muutoksen perusteella, vaan sitä
+					voi muokata <code>ALTER TABLE</code> -lausekkeilla -- esimerkiksi uusien sarakkeiden lisääminen
+					tauluun on melko suoraviivaista.</p>
+
+				<p>Tässä materiaalissa toistaiseksi käyttämämme tietokannanhallintajärjestelmä, SQLite, tukee <a
+						href="http://sqlite.org/lang_altertable.html" target="_blank">vain muutamia</a>
+					muokkausoperaatiota. Näistä kannattaa varmaan tuntea ainakin <code>ADD COLUMN</code>, joka lisää
+					tietokantatauluun uuden sarakkeen. Tämä tehdään SQLitessä seuraavasti:</p>
+
+				<pre class="sh_sql">
+ALTER TABLE Opiskelija ADD COLUMN kutsumanimi varchar(50);
+</pre>
+
+				<p><code>ALTER TABLE</code> -lausekkeiden kanssa voi käyttää myös rajoitteita suunnilleen vastaavasti
+					kuten tietokantataulua luotaessa.</p>
+
+				<p>Muiden tietokannanhallintajärjestelmien tarjoamia monipuolisempia vaihtoehtoja voit nähdä esimerkiksi
+					<em>W3Schools</em>-sivustolla -- lue nyt heidän <a href="http://www.w3schools.com/sql/sql_alter.asp"
+						target="_blank">ALTER TABLE</a> -oppaansa.</p>
+						
+				<h3><b>26. Tehtävä: ALTER TABLE</b></h3>
+					<p>Minkälaisia muutoksia W3Schools.com:n mukaan ALTER TABLE -komennolla voi tehdä? Tee mahdollisista
+					komennoista ohjeet esimerkkeineen ja palauta GitHubiin teht26.md -tiedostona.</p>
+				
+		</section>
+	</article>
+
+	<footer>
+		<p>
+			<a id="license" rel="license" href="http://creativecommons.org/licenses/by-nc-sa/2.0/"><img
+					alt="Creative Commons License" style="border-width:0; float:left; padding:15px"
+					src="http://i.creativecommons.org/l/by-nc-sa/2.0/88x31.png" /></a>
+			<small>T&auml;m&auml; materiaali on lisensoitu Creative Commons BY-NC-SA-lisenssill&auml;, joten voit
+				k&auml;ytt&auml;&auml; ja levitt&auml;&auml; sit&auml; vapaasti, kunhan alkuper&auml;isten
+				tekij&ouml;iden nimi&auml; ei poisteta. Jos teet muutoksia materiaaliin ja haluat levitt&auml;&auml;
+				muunneltua versiota, se t&auml;ytyy lisensoida samanlaisella vapaalla lisenssill&auml;. Materiaalien
+				k&auml;ytt&ouml; kaupalliseen tarkoitukseen on ilman erillist&auml; lupaa kielletty. Tekij&auml;(t): <a
+					href="http://www.cs.helsinki.fi/en/people/avihavai" target="_blank">Arto Vihavainen</a> ja <a
+					href="http://www.cs.helsinki.fi/en/people/mluukkai" target="_blank">Matti Luukkainen</a> (<a
+					href="http://www.cs.helsinki.fi/en/rage" target="_blank">Agile Education Research</a>
+				-tutkimusryhm&auml;). Materiaalia muokannut Vantaan Varian opiskelijoiden tarpeisiin, Mira Vorne.
+		</p>
+	</footer>
+
+	<div class="hidden">
+		<p>the end.</p>
+	</div>
+
+
+	<script src="js/libs/jquery/jquery.js"></script>
+	<script src="js/libs/jqueryui/jquery-ui.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<!--
+	<script src="js/libs/bootstrap.min.js"></script>
+-->
+	<script src="js/libs/syntaxhighlight/sh_main.min.js"></script>
+	<script src="js/tikape.js"></script>
+
+
+
+	<!-- angularjs -->
+	<!--	<script src="js/libs/angular.min.js"></script>
+-->
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+	<!-- tikape sqljs -- https://github.com/mluukkai/tikape-sqljs -->
+	<script src="js/libs/sql.js"></script>
+	<script src="js/table.js"></script>
+	<script src="js/app.js"></script>
+	<script src="js/directives.js"></script>
+</body>
+
+</html>
