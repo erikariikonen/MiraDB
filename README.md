@@ -1,9 +1,9 @@
 # Databases  
 Tämä on tietokantojen opetussivusto
 
-1. Suorita tehtävät.
+1. Suorita harjoitustehtävät ja palauta vastaukset GitHubiin.
 
-2. Tee relaatiotietokantasovellus sinua kiinnostavasta aiheesta, esim:
+2. Suunnittele relaatiotietokantasovellus sinua kiinnostavasta aiheesta, esim:
      - Teatteri
      - Elokuvat
      - Pelit
