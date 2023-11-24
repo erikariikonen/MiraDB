@@ -4,9 +4,9 @@ Tämä on tietokantojen opetussivusto
 1. Suorita tehtävät.
 
 2. Tee relaatiotietokantasovellus sinua kiinnostavasta aiheesta, esim:
-  - Teatteri
-  - Elokuvat
-  - Pelit
+     -Teatteri
+     -Elokuvat
+     -Pelit
 
 3. Toteuta käyttöliittymä Electron.js:llä ja mySQL tietokannalla
 
