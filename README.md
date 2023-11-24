@@ -15,4 +15,4 @@ Tämä on tietokantojen opetussivusto
 5. Tee usean taulun relaatiotietokantamalli draw.io:lla
 
 6.  Esim. Teatteritietokanta:
-   [Teatteri](http://ilona.tinfo.fi/default.aspx?lang=fi)
+   [Ilona](http://ilona.tinfo.fi/default.aspx?lang=fi)
