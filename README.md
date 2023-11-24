@@ -12,8 +12,5 @@ Tämä on tietokantojen opetussivusto
 
 4. Tee usean taulun relaatiotietokantamalli draw.io:lla
 
-5.  Esim. Teatteritietokanta, sisältö
-  - Produktiotiedot
-  - Teatterit
-  - Tekijät (ohjaaja, näyttelijät, puvustajat, lavastajat, ...)
-  - Näytökset (aikataulut)
+5.  Esim. Teatteritietokanta:
+   [Teatteri](http://ilona.tinfo.fi/default.aspx?lang=fi)
