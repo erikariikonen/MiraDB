@@ -15,5 +15,5 @@ Tämä on tietokantojen opetussivusto
 5.  Esim. Teatteritietokanta, sisältö
 - Produktiotiedot
 - Teatterit
-- Tekijät (ohjaaja, näytteklijät, puvustajat, lavastajat, ...)
+- Tekijät (ohjaaja, näyttelijät, puvustajat, lavastajat, ...)
 - Näytökset (aikataulut)
