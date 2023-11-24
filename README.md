@@ -12,13 +12,8 @@ Tämä on tietokantojen opetussivusto
 
 4. Tee usean taulun relaatiotietokantamalli draw.io:lla
 
-5.  Esim. Teatteritietokanta
--- Produktiotiedot
--- Teatterit
--- Tekijät
---- Ohjaajat
---- Näyttelijät
---- Puvustajat
---- jne.
--- Näytökset
---- Näytösaikataulut
+5.  Esim. Teatteritietokanta, sisältö
+- Produktiotiedot
+- Teatterit
+- Tekijät (ohjaaja, näytteklijät, puvustajat, lavastajat, ...)
+- Näytökset (aikataulut)
