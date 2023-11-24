@@ -8,11 +8,11 @@ Tämä on tietokantojen opetussivusto
      - Elokuvat
      - Pelit
 
-3. Toteuta ylläpitokäyttöliittymä Electron.js:llä
+3. Tee usean taulun relaatiotietokantamalli draw.io:lla
 
-4.  Tee selainkäyttöliittymä tietojen hakemiseen.
+4. Toteuta ylläpitokäyttöliittymä Electron.js:llä
 
-5. Tee usean taulun relaatiotietokantamalli draw.io:lla
+5. Tee selainkäyttöliittymä tietojen hakemiseen
 
 6.  Esim. Teatteritietokanta:
    [Ilona](http://ilona.tinfo.fi/default.aspx?lang=fi)
