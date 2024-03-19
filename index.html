@@ -35,11 +35,32 @@
 					perustaan ja toisaalta tietokannan käytännön käsittelyyn SQL-kielen avulla. Kurssilla opitaan myös
 					perustiedot relaatiotietokantojen suunnittelusta."</em>
 				<br /><br />
-				ALOITUS: Tee GitHubiin repositorio nimeltä SQL. Tallenna vastaukset repositorion juureen README.md-tiedostona.
+				ALOITUS: Tee GitHubiin repositorio nimeltä SQL. Tallenna vastaukset repositorion juureen README.md-tiedostona. Voit myös kirjautua sisälle, jolloin vastauksesi säästyvät sivulle.
+				<br />
 
+				<!-- Login -->
+				<form id="loginForm" action="http://localhost:8000/azure_conn.php" method="post" style="display: none;">
+					<label for="username">Käyttäjänimi:</label>
+					<br />
+					<input type="text" id="username" name="username" placeholder="" required minlength="3">
+					<br />
+					<label for="password">Salasana:</label>
+					<br />
+					<input type="password" id="password" name="password" placeholder="" required minlength="3">
+					<br />
+					<div id="errorMessage" style="display: none; color: red;">Väärä käyttäjä tai salasana.</div>
+					<br />
+					<button id="loginButton" type="submit">Kirjaudu</button>
+					<button id="newUserButton" type="button">Uusi käyttäjä</button>
+					<button id="registerButton" type="button" style="display: none;">Rekisteröidy</button>
+					<button id="backButton" type="button" style="display: none;">Takaisin</button>
+				</form>
+				<div id="loggedInInfo" style="display: none;"></div>
+				<br />
+				<button id="logoutButton" style="display: none;">Kirjaudu ulos</button>
+				<!-- Login end -->
 			</p>
 
-			</p>
 
 		</section>
 		<!-- END INDEX -->
@@ -3128,6 +3149,8 @@ ALTER TABLE Opiskelija ADD COLUMN kutsumanimi varchar(50);
 	<script src="js/table.js"></script>
 	<script src="js/app.js"></script>
 	<script src="js/directives.js"></script>
+	<!-- Erikan login logiikka -->
+	<script src="js/login.js"></script>
 </body>
 
 </html>
