@@ -4,28 +4,27 @@ document.addEventListener("DOMContentLoaded", function() {
     var registerButton = document.getElementById("registerButton");
     var backButton = document.getElementById("backButton");
     var errorMessage = document.getElementById("errorMessage");
-    var loggedInInfo = document.getElementById("loggedInInfo"); // New element for displaying logged-in user info
-    var logoutButton = document.getElementById("logoutButton"); // New element for logout button
+    var loggedInInfo = document.getElementById("loggedInInfo");
+    var logoutButton = document.getElementById("logoutButton");
 
-    // Check login state when the page loads
     var isLoggedIn = localStorage.getItem("loggedInUser");
 
     if (isLoggedIn) {
-        loginForm.style.display = "none"; // Hide the login form
-        loggedInInfo.innerHTML = "Logged in as: <strong>" + isLoggedIn + "</strong>"; // Display logged-in user info
-        loggedInInfo.style.display = "block"; // Show the logged-in info
-        logoutButton.style.display = "inline-block"; // Show the logout button
+        loginForm.style.display = "none";
+        loggedInInfo.innerHTML = "Logged in as: <strong>" + isLoggedIn + "</strong>";
+        loggedInInfo.style.display = "block";
+        logoutButton.style.display = "inline-block";
+        submitForm();
     } else {
-        loginForm.style.display = "block"; // Display the login form
+        loginForm.style.display = "block";
     }
 
     loginForm.addEventListener("submit", handleFormSubmission);
     newUserButton.addEventListener("click", toggleForms);
     backButton.addEventListener("click", toggleBack);
     registerButton.addEventListener("click", registerUser);
-    logoutButton.addEventListener("click", logoutUser); // Event listener for logout button
+    logoutButton.addEventListener("click", logoutUser);
 
-    // Check if the user is already logged in
     var loggedInUser = localStorage.getItem("loggedInUser");
     if (loggedInUser) {
         showLoggedInState(loggedInUser);
@@ -41,16 +40,15 @@ document.addEventListener("DOMContentLoaded", function() {
         formData.append("username", username);
         formData.append("password", password);
 
-        // Send username and password to the server without the 'register' parameter
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:8000/azure_conn.php", true);
 
         xhr.onload = function() {
-            console.log(xhr.responseText); // Log the response text
+            console.log(xhr.responseText);
             if (xhr.status >= 200 && xhr.status < 300) {
                 var response = JSON.parse(xhr.responseText);
                 if (response.status === "success") {
-                    localStorage.setItem("loggedInUser", username); // Store login state in local storage
+                    localStorage.setItem("loggedInUser", username);
                     showLoggedInState(username);
                 } else {
                     displayErrorMessage("Väärä käyttäjä tai salasana.");
@@ -104,7 +102,6 @@ document.addEventListener("DOMContentLoaded", function() {
     
         loginButton.innerText = loginButtonText;
     
-        // Remove added line breaks
         var addedLineBreaks = document.querySelectorAll('.added-line-break');
         addedLineBreaks.forEach(function(br) {
             br.remove();
@@ -121,8 +118,7 @@ document.addEventListener("DOMContentLoaded", function() {
             backButton.style.display = "none";
             registerButton.style.display = "none";
         }
-    
-        // Insert email field at the top
+
         var usernameLabel = document.querySelector('label[for="username"]');
         var usernameInput = document.getElementById("username");
         var emailLabel = document.querySelector('label[for="email"]');
@@ -151,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 loginForm.insertBefore(br.cloneNode(), usernameLabel);
             }
         } else {
-            // Remove the email field
+
             if (emailLabel) {
                 emailLabel.remove();
             }
@@ -159,7 +155,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 emailInput.remove();
             }
     
-            // Remove only the added line breaks, not the original one
             var addedLineBreaks = document.querySelectorAll('.added-line-break');
             addedLineBreaks.forEach(function(br) {
                 br.remove();
@@ -178,20 +173,17 @@ document.addEventListener("DOMContentLoaded", function() {
         formData.append("email", email);
         formData.append("register", true);
     
-        // Send username, password, and email to the server
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://localhost:8000/azure_conn.php", true);
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200) {
-                    // Registration successful
+
                     alert("Registration successful!");
-                    // Clear the form fields
                     document.getElementById("username").value = "";
                     document.getElementById("password").value = "";
                     document.getElementById("email").value = "";
                 } else {
-                    // Registration failed
                     alert("Registration failed. Please try again later.");
                 }
             }
@@ -200,7 +192,14 @@ document.addEventListener("DOMContentLoaded", function() {
     }    
 
     function logoutUser() {
-        localStorage.removeItem("loggedInUser"); // Clear login state from local storage
-        location.reload(); // Refresh the page to clear login info
+        localStorage.removeItem("loggedInUser");
+        location.reload();
     }
+
+    var submissionForm = document.getElementById("task1");
+    submissionForm.addEventListener("submit", function(event) {
+        event.preventDefault();
+        console.log("Submit successful!");
+    });
+
 });
