@@ -1,3 +1,5 @@
+var isLoggedIn = localStorage.getItem("loggedInUser");
+
 document.addEventListener("DOMContentLoaded", function() {
     var loginForm = document.getElementById("loginForm");
     var newUserButton = document.getElementById("newUserButton");
@@ -7,14 +9,11 @@ document.addEventListener("DOMContentLoaded", function() {
     var loggedInInfo = document.getElementById("loggedInInfo");
     var logoutButton = document.getElementById("logoutButton");
 
-    var isLoggedIn = localStorage.getItem("loggedInUser");
-
     if (isLoggedIn) {
         loginForm.style.display = "none";
         loggedInInfo.innerHTML = "Logged in as: <strong>" + isLoggedIn + "</strong>";
         loggedInInfo.style.display = "block";
         logoutButton.style.display = "inline-block";
-        submitForm();
     } else {
         loginForm.style.display = "block";
     }
@@ -49,7 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 var response = JSON.parse(xhr.responseText);
                 if (response.status === "success") {
                     localStorage.setItem("loggedInUser", username);
-                    showLoggedInState(username);
+                    location.reload();
                 } else {
                     displayErrorMessage("Väärä käyttäjä tai salasana.");
                 }

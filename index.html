@@ -229,11 +229,26 @@
 				<h1>Pientä pohdintaa!</h1>
 				<h4>3. Tehtävä: Piirrä kaavio</h4>
 				<p>Hahmottele paperille seuraavaan kuvaukseen liittyvä kaavio yllä esitetyllä tavalla. Ota siitä kuva ja
-					siirrä GitHubin SQL repositorioon. Mitkä ovat
+					siirrä GitHubin SQL repositorioon tai lataa tiedosto tälle sivulle. Mitkä ovat
 					käsitteet, ja miten ne liittyvät toisiinsa?</p>
 
 				<p><em>Opettajalla on useita kursseja, joita hän opettaa. Jokaiseen kurssiin liittyy ajankohta, jolloin
 						kurssi järjestetään, sekä kurssin käyttämä sali.</em></p>
+				<br />
+				<!-- IMG upload -->
+				<br /> <br />
+				<img id="uploadedImage" style="max-width: 300px; max-height: 300px;" />
+				<button id="uploadButton" onclick="isLoggedIn ? uploadImage() : null" class="btn btn-default">
+					Lisää kuva
+				</button>
+				<script>
+					document.addEventListener("DOMContentLoaded", function() {
+						if (!isLoggedIn) {
+							uploadButton.disabled = true;
+							uploadButton.setAttribute("title", "Kirjaudu sisään.");
+						}
+					});
+				</script>				
 
 			</aside>
 
@@ -3157,7 +3172,7 @@ ALTER TABLE Opiskelija ADD COLUMN kutsumanimi varchar(50);
 	<script src="js/directives.js"></script>
 	<!-- Erikan login logiikka -->
 	<script src="js/login.js"></script>
-	<script src="js/submit.js"></script>
+	<script src="js/submittask.js"></script>
 </body>
 
 </html>
